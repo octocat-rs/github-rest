@@ -9,13 +9,13 @@ use std::error::Error;
 pub struct DefaultRequest {}
 
 #[async_trait]
-impl Requester<CoolError> for DefaultRequest {
+impl Requester for DefaultRequest {
     async fn raw_req<T, V>(
         &self,
         url: EndPoints,
         query: Option<&T>,
         body: Option<V>,
-    ) -> Result<String, CoolError>
+    ) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
         V: Into<Body> + std::marker::Send,
@@ -55,7 +55,7 @@ impl Requester<CoolError> for DefaultRequest {
         url: EndPoints,
         query: Option<&T>,
         body: Option<V>,
-    ) -> Result<A, CoolError>
+    ) -> Result<A, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
         V: Into<Body> + std::marker::Send,
@@ -66,36 +66,39 @@ impl Requester<CoolError> for DefaultRequest {
 }
 
 #[derive(Debug)]
-pub struct CoolError;
+pub enum GithubRestError {
+    ReqwestError(reqwest::Error),
+    JsonError(serde_json::Error),
+}
 
-impl fmt::Display for CoolError {
+impl fmt::Display for GithubRestError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "MONKEY")
     }
 }
 
-impl Error for CoolError {}
+impl Error for GithubRestError {}
 
-impl From<reqwest::Error> for CoolError {
+impl From<reqwest::Error> for GithubRestError {
     fn from(e: reqwest::Error) -> Self {
-        CoolError {}
+        GithubRestError::ReqwestError(e)
     }
 }
-impl From<serde_json::Error> for CoolError {
+impl From<serde_json::Error> for GithubRestError {
     fn from(e: serde_json::Error) -> Self {
-        CoolError {}
+        GithubRestError::JsonError(e)
     }
 }
 
 use async_trait::async_trait;
 #[async_trait]
-pub trait Requester<E: Error + std::marker::Send + From<serde_json::Error> + From<reqwest::Error>> {
+pub trait Requester {
     async fn raw_req<T, V>(
         &self,
         url: EndPoints,
         query: Option<&T>,
         body: Option<V>,
-    ) -> Result<String, E>
+    ) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
         V: Into<Body> + std::marker::Send;
@@ -105,122 +108,8 @@ pub trait Requester<E: Error + std::marker::Send + From<serde_json::Error> + Fro
         url: EndPoints,
         query: Option<&T>,
         body: Option<V>,
-    ) -> Result<A, E>
+    ) -> Result<A, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
         V: Into<Body> + std::marker::Send;
 }
-
-// pub struct DefaultRequest {}
-
-// #[async_trait]
-// impl Requester<CoolError> for DefaultRequest {
-//     // async fn raw_req<T, V>(
-//     //     &self,
-//     //     url: EndPoints,
-//     //     query: Option<&T>,
-//     //     body: Option<V>,
-//     // ) -> Result<String, Error>
-//     // where
-//     //     T: Serialize + ?Sized,
-//     //     V: Into<Body>,
-//     // {
-//     //     let mut headers = header::HeaderMap::new();
-//     //     headers.insert(
-//     //         header::USER_AGENT,
-//     //         header::HeaderValue::from_str("tricked.pro/v2").unwrap(),
-//     //     );
-//     //     let client = reqwest::Client::builder()
-//     //         .default_headers(headers)
-//     //         .build()
-//     //         .unwrap();
-//     //     let path = format!("https://api.github.com{}", url.path());
-//     //     let mut req = match url.method() {
-//     //         Methods::Get => client.get(path),
-//     //         Methods::Post => client.post(path),
-//     //         Methods::Put => client.put(path),
-//     //         Methods::Patch => client.patch(path),
-//     //         Methods::Delete => client.delete(path),
-//     //     };
-//     //     if let Some(query) = query {
-//     //         req = req.query(query)
-//     //     }
-//     //     if let Some(body) = body {
-//     //         req = req.body(body)
-//     //     }
-//     //     let txt = req.send().await?.text().await?;
-
-//     //     Ok(txt)
-//     // }
-//     async fn req<T, V, A: DeserializeOwned>(
-//         &self,
-//         url: EndPoints,
-//         query: Option<&T>,
-//         body: Option<V>,
-//     ) -> Result<A, CoolError>
-//     where
-//         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
-//         V: Into<Body> + std::marker::Send,
-//     {
-//         let client = reqwest::Client::builder().build().unwrap();
-//         let req = client
-//             .get(format!("https://api.github.com{}", url.path()))
-//             .send()
-//             .await
-//             .unwrap();
-//         // let mut headers = header::HeaderMap::new();
-//         // headers.insert(
-//         //     header::USER_AGENT,
-//         //     header::HeaderValue::from_str("tricked.pro/v2").unwrap(),
-//         // );
-//         // let client = reqwest::Client::builder()
-//         //     .default_headers(headers)
-//         //     .build()
-//         //     .unwrap();
-//         // let path = format!("https://api.github.com{}", url.path());
-//         // let mut req = match url.method() {
-//         //     Methods::Get => client.get(path),
-//         //     Methods::Post => client.post(path),
-//         //     Methods::Put => client.put(path),
-//         //     Methods::Patch => client.patch(path),
-//         //     Methods::Delete => client.delete(path),
-//         // };
-//         // if let Some(query) = query {
-//         //     req = req.query(query)
-//         // }
-//         // if let Some(body) = body {
-//         //     req = req.body(body)
-//         // }
-//         let txt = &req.text().await?;
-//         // println!("{}", txt);
-//         Ok(serde_json::from_str(txt)?)
-//     }
-// }
-
-// #[derive(Debug)]
-// struct CoolError;
-
-// impl fmt::Display for CoolError {
-//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-//         write!(f, "SuperErrorSideKick is here!")
-//     }
-// }
-
-// impl Error for CoolError {}
-
-// // #[derive(Debug)]
-// // pub enum Error {
-// //     ReqwestError(reqwest::Error),
-// //     SerdeError(serde_json::Error),
-// // }
-
-// impl From<reqwest::Error> for CoolError {
-//     fn from(e: reqwest::Error) -> Self {
-//         CoolError {}
-//     }
-// }
-// impl From<serde_json::Error> for CoolError {
-//     fn from(e: serde_json::Error) -> Self {
-//         CoolError {}
-//     }
-// }

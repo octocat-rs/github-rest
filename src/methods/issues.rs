@@ -15,7 +15,7 @@ pub async fn create_issue(
     repo: String,
     owner: String,
     body: CreateIssueBody,
-) -> Result<GetResponse, CoolError> {
+) -> Result<GetResponse, GithubRestError> {
     client
         .req::<String, String, GetResponse>(
             EndPoints::PostReposownerrepoIssues(repo, owner),
@@ -24,3 +24,11 @@ pub async fn create_issue(
         )
         .await
 }
+// TODO: add this function
+// pub async fn get_issues<T: Requester>(client: T, repo: String,
+//     owner: String,
+//     body: CreateIssueBody,) -> Result<GetReposownerrepoIssuesResponse, CoolError> where T:Requester{
+//     client
+//         .req::<String, String, GetResponse>(EndPoints::GetReposownerrepoIssues(repo, owner), None, None)
+//         .await
+// }
