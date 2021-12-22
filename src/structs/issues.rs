@@ -4,36 +4,6 @@ extern crate serde_json;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct CreateIssueResponse {
-    id: i64,
-    node_id: String,
-    url: String,
-    repository_url: String,
-    labels_url: String,
-    comments_url: String,
-    events_url: String,
-    html_url: String,
-    number: i64,
-    state: String,
-    title: String,
-    body: String,
-    user: Assignee,
-    labels: Vec<Label>,
-    assignee: Assignee,
-    assignees: Vec<Assignee>,
-    milestone: Milestone,
-    locked: bool,
-    active_lock_reason: String,
-    comments: i64,
-    pull_request: PullRequest,
-    closed_at: Option<serde_json::Value>,
-    created_at: String,
-    updated_at: String,
-    closed_by: Assignee,
-    author_association: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Assignee {
     login: String,
     id: i64,
@@ -51,7 +21,7 @@ pub struct Assignee {
     repos_url: String,
     events_url: String,
     received_events_url: String,
-    assignee_type: String,
+    assignee_type: Option<String>,
     site_admin: bool,
 }
 
@@ -63,7 +33,7 @@ pub struct Label {
     name: String,
     description: String,
     color: String,
-    label_default: bool,
+    label_default: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -88,15 +58,40 @@ pub struct Milestone {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PullRequest {
-    #[serde(rename = "url")]
     url: String,
-
-    #[serde(rename = "html_url")]
     html_url: String,
-
-    #[serde(rename = "diff_url")]
     diff_url: String,
-
-    #[serde(rename = "patch_url")]
     patch_url: String,
+}
+
+pub type Issues = Vec<Issue>;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Issue {
+    id: i64,
+    node_id: String,
+    url: String,
+    repository_url: String,
+    labels_url: String,
+    comments_url: String,
+    events_url: String,
+    html_url: String,
+    number: i64,
+    state: String,
+    title: String,
+    body: String,
+    user: Assignee,
+    labels: Vec<Label>,
+    assignee: Option<Assignee>,
+    assignees: Vec<Assignee>,
+    milestone: Option<Milestone>,
+    locked: bool,
+    active_lock_reason: Option<String>,
+    comments: i64,
+    pull_request: Option<PullRequest>,
+    closed_at: Option<serde_json::Value>,
+    created_at: String,
+    updated_at: String,
+    closed_by: Option<Assignee>,
+    author_association: String,
 }

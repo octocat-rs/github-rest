@@ -1,5 +1,6 @@
 use super::prelude::*;
 
+//TODO make a builder for this to **it must be completed using .execute()** not `build().execute()`
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CreateIssueBody {
     title: String,
@@ -11,21 +12,69 @@ pub struct CreateIssueBody {
 }
 
 //TODO: TEST THIS
+/// * tags issues
+/// * post `/repos/{owner}/{repo}/issues`
+/// * docs <https://docs.github.com/rest/reference/issues#create-an-issue>
+///
+/// Create an issue
+/// Any user with pull access to a repository can create an issue. If [issues are disabled in the repository](https://help.github.com/articles/disabling-issues/), the API returns a `410 Gone` status.
+///
+/// This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 pub async fn create_issue<T>(
     client: &T,
     owner: String,
     repo: String,
     body: CreateIssueBody,
-) -> Result<CreateIssueResponse, GithubRestError>
+) -> Result<Issue, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<String, String, CreateIssueResponse>(
+        .req::<String, String, Issue>(
             EndPoints::PostReposownerrepoIssues(owner, repo),
             None,
             Some(serde_json::to_string(&body)?),
         )
+        .await
+}
+
+//TODO make a builder for this to **it must be completed using .execute()** not `build().execute()`
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct GetIssueBody {
+    milestone: Option<String>,
+    state: Option<String>,
+    assignee: Option<String>,
+    creator: Option<String>,
+    mentioned: Option<String>,
+    labels: Option<String>,
+    sort: Option<String>,
+    direction: Option<String>,
+    per_page: Option<String>,
+    page: Option<String>,
+}
+
+/// * tags issues
+/// * get `/repos/{owner}/{repo}/issues`
+/// * docs <https://docs.github.com/rest/reference/issues#list-repository-issues>
+///
+/// List repository issues
+/// List issues in a repository.
+///
+/// **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this
+/// reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by
+/// the `pull_request` key. Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull
+/// request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
+pub async fn get_issues<T>(
+    client: &T,
+    owner: String,
+    repo: String,
+    options: Option<&GetIssueBody>,
+) -> Result<Issues, GithubRestError>
+where
+    T: Requester,
+{
+    client
+        .req::<GetIssueBody, String, Issues>(EndPoints::GetReposownerrepoIssues(owner, repo), options, None)
         .await
 }
 
@@ -58,13 +107,33 @@ mod tests {
         .unwrap();
         println!("{:#?}", r)
     }
+    #[tokio::test]
+    async fn test_get_issues() {
+        let reqester = DefaultRequest::new_none();
+
+        let r = get_issues(&reqester, "microsoft".to_owned(), "vscode".to_owned(), None)
+            .await
+            .unwrap();
+        println!("{:#?}", r)
+    }
+    #[tokio::test]
+    async fn test_get_issues2() {
+        let reqester = DefaultRequest::new_none();
+        let bdy = GetIssueBody {
+            milestone: None,
+            state: None,
+            assignee: None,
+            creator: None,
+            mentioned: None,
+            labels: None,
+            sort: None,
+            direction: None,
+            per_page: Some("1".to_owned()),
+            page: None,
+        };
+        let r = get_issues(&reqester, "microsoft".to_owned(), "vscode".to_owned(), Some(&bdy))
+            .await
+            .unwrap();
+        println!("{:#?}", r)
+    }
 }
-// TODO: add this function
-// pub async fn get_issues<T: Requester>(client: T, repo: String,
-//     owner: String,
-//     body: CreateIssueBody,) -> Result<GetReposownerrepoIssuesResponse,
-// CoolError> where T:Requester{     client
-//         .req::<String, String,
-// GetResponse>(EndPoints::GetReposownerrepoIssues(repo, owner), None, None)
-//         .await
-// }

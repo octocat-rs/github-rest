@@ -10,6 +10,8 @@ pub mod client;
 pub mod methods;
 pub mod structs;
 
+//TODO WRITE macros for structs to have everything be getters (?)
+
 #[derive(Debug)]
 pub enum GithubRestError {
     ReqwestError(reqwest::Error),
