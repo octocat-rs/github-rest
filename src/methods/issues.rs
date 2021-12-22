@@ -10,19 +10,52 @@ pub struct CreateIssueBody {
     assignees: Option<Vec<String>>,
 }
 //TODO: TEST THIS
-pub async fn create_issue(
-    client: &DefaultRequest,
-    repo: String,
+pub async fn create_issue<T>(
+    client: &T,
     owner: String,
+    repo: String,
     body: CreateIssueBody,
-) -> Result<GetResponse, GithubRestError> {
+) -> Result<CreateIssueResponse, GithubRestError>
+where
+    T: Requester,
+{
     client
-        .req::<String, String, GetResponse>(
-            EndPoints::PostReposownerrepoIssues(repo, owner),
+        .req::<String, String, CreateIssueResponse>(
+            EndPoints::PostReposownerrepoIssues(owner, repo),
             None,
             Some(serde_json::to_string(&body)?),
         )
         .await
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::client::DefaultRequest;
+
+    #[tokio::test]
+    async fn test_create_issue() {
+        let reqester = DefaultRequest::new("TOKEN".to_owned());
+
+        let bdy = CreateIssueBody {
+            title: "tricked is cool".to_owned(),
+            body: Some("This is very true".to_owned()),
+            assignee: None,
+            milestone: None,
+            labels: None,
+            assignees: None,
+        };
+
+        let r = create_issue(
+            &reqester,
+            "Tricked-dev".to_owned(),
+            "octo-computing-machine".to_owned(),
+            bdy,
+        )
+        .await
+        .unwrap();
+        println!("{:#?}", r)
+    }
 }
 // TODO: add this function
 // pub async fn get_issues<T: Requester>(client: T, repo: String,

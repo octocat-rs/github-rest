@@ -20,16 +20,17 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::client::DefaultRequest;
 
     #[tokio::test]
     async fn test_zen() {
-        let reqester = DefaultRequest {};
+        let reqester = DefaultRequest::new_none();
         let r = zen(&reqester).await.unwrap();
         println!("{}", r)
     }
     #[tokio::test]
     async fn test_api_info() {
-        let reqester = DefaultRequest {};
+        let reqester = DefaultRequest::new_none();
         let r = api_info(&reqester).await.unwrap();
         println!("{:#?}", r)
     }
