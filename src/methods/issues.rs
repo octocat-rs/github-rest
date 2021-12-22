@@ -9,6 +9,7 @@ pub struct CreateIssueBody {
     labels: Option<Vec<String>>,
     assignees: Option<Vec<String>>,
 }
+
 //TODO: TEST THIS
 pub async fn create_issue<T>(
     client: &T,
@@ -30,8 +31,9 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::client::DefaultRequest;
+
+    use super::*;
 
     #[tokio::test]
     async fn test_create_issue() {
@@ -60,8 +62,9 @@ mod tests {
 // TODO: add this function
 // pub async fn get_issues<T: Requester>(client: T, repo: String,
 //     owner: String,
-//     body: CreateIssueBody,) -> Result<GetReposownerrepoIssuesResponse, CoolError> where T:Requester{
-//     client
-//         .req::<String, String, GetResponse>(EndPoints::GetReposownerrepoIssues(repo, owner), None, None)
+//     body: CreateIssueBody,) -> Result<GetReposownerrepoIssuesResponse,
+// CoolError> where T:Requester{     client
+//         .req::<String, String,
+// GetResponse>(EndPoints::GetReposownerrepoIssues(repo, owner), None, None)
 //         .await
 // }

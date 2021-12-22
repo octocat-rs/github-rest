@@ -1,12 +1,14 @@
-pub mod client;
-pub mod methods;
-pub mod structs;
-
 use core::fmt;
+use std::error::Error;
+
+use async_trait::async_trait;
 use github_api::end_points::EndPoints;
 use reqwest::{Body, StatusCode};
 use serde::{de::DeserializeOwned, Serialize};
-use std::error::Error;
+
+pub mod client;
+pub mod methods;
+pub mod structs;
 
 #[derive(Debug)]
 pub enum GithubRestError {
@@ -29,13 +31,13 @@ impl From<reqwest::Error> for GithubRestError {
         GithubRestError::ReqwestError(e)
     }
 }
+
 impl From<serde_json::Error> for GithubRestError {
     fn from(e: serde_json::Error) -> Self {
         GithubRestError::JsonError(e)
     }
 }
 
-use async_trait::async_trait;
 #[async_trait]
 pub trait Requester {
     async fn raw_req<T, V>(

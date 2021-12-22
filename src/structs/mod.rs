@@ -1,2 +1,3 @@
-mod issues;
 pub use issues::*;
+
+mod issues;

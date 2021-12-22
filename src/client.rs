@@ -1,8 +1,9 @@
-use crate::{GithubRestError, Requester};
 use async_trait::async_trait;
 use github_api::end_points::{EndPoints, Methods};
 use reqwest::{header, Body};
 use serde::{de::DeserializeOwned, Serialize};
+
+use crate::{GithubRestError, Requester};
 
 pub struct DefaultRequest {
     client: reqwest::Client,
@@ -24,12 +25,10 @@ impl DefaultRequest {
             header::HeaderValue::from_str(auth.as_str()).unwrap(),
         );
 
-        let client = reqwest::Client::builder()
-            .default_headers(headers)
-            .build()
-            .unwrap();
+        let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
         DefaultRequest { client }
     }
+
     pub fn new_none() -> Self {
         let mut headers = header::HeaderMap::new();
         headers.insert(
@@ -41,22 +40,14 @@ impl DefaultRequest {
             header::HeaderValue::from_str("application/vnd.github.v3+json").unwrap(),
         );
 
-        let client = reqwest::Client::builder()
-            .default_headers(headers)
-            .build()
-            .unwrap();
+        let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
         DefaultRequest { client }
     }
 }
 
 #[async_trait]
 impl Requester for DefaultRequest {
-    async fn raw_req<T, V>(
-        &self,
-        url: EndPoints,
-        query: Option<&T>,
-        body: Option<V>,
-    ) -> Result<String, GithubRestError>
+    async fn raw_req<T, V>(&self, url: EndPoints, query: Option<&T>, body: Option<V>) -> Result<String, GithubRestError>
     where
         T: Serialize + ?Sized + std::marker::Send + std::marker::Sync,
         V: Into<Body> + std::marker::Send,
@@ -81,16 +72,14 @@ impl Requester for DefaultRequest {
         match res.status().as_u16() {
             200..=299 => {}
             _ => {
-                return Err(GithubRestError::ResponseError(
-                    res.status(),
-                    res.text().await?,
-                ))
+                return Err(GithubRestError::ResponseError(res.status(), res.text().await?));
             }
         }
         let txt = res.text().await?;
 
         Ok(txt)
     }
+
     async fn req<T, V, A: DeserializeOwned>(
         &self,
         url: EndPoints,
