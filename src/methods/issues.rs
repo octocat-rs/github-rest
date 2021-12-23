@@ -38,7 +38,6 @@ where
         .await
 }
 
-//TODO make a builder for this to **it must be completed using .execute()** not `build().execute()`
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GetIssueBody {
     ///If an integer is passed, it should refer to a milestone by its number field. If the string * is passed, issues with any milestone are accepted. If the string none is passed, issues without milestones are returned.
@@ -92,6 +91,53 @@ where
 {
     client
         .req::<GetIssueBody, String, Issues>(EndPoints::GetReposownerrepoIssues(owner, repo), options, None)
+        .await
+}
+
+//TODO make a builder for this to **it must be completed using .execute()** not `build().execute()`
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct GetPullsBody {
+    //TODO: write a enum for this
+    ///Either open, closed, or all to filter by state.
+    ///Default: open
+    pub state: Option<String>,
+    ///Filter pulls by head user or head organization and branch name in the format of user:ref-name or organization:ref-name. For example: github:new-script-format or octocat:test-branch.
+    pub head: Option<String>,
+    ///Filter pulls by base branch name. Example: gh-pages.
+    pub base: Option<String>,
+    ///What to sort results by. Can be either created, updated, popularity (comment count) or long-running (age, filtering by pulls updated in the last month).
+    ///Default: created
+    pub sort: Option<String>,
+    ///One of asc (ascending) or desc (descending).
+    ///Default: desc
+    pub direction: Option<String>,
+    ///Only show notifications updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+    pub since: Option<String>,
+    ///Results per page (max 100)
+    ///Default: 30
+    pub per_page: Option<String>,
+    ///Page number of the results to fetch.
+    ///Default: 1
+    pub page: Option<String>,
+}
+
+/// * tags pulls
+/// * get `/repos/{owner}/{repo}/pulls`
+/// * docs <https://docs.github.com/rest/reference/pulls#list-pull-requests>
+///
+/// List pull requests
+/// Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
+pub async fn get_pulls<T>(
+    client: &T,
+    owner: String,
+    repo: String,
+    options: Option<&GetIssueBody>,
+) -> Result<Pulls, GithubRestError>
+where
+    T: Requester,
+{
+    client
+        .req::<GetIssueBody, String, Pulls>(EndPoints::GetReposownerrepoPulls(owner, repo), options, None)
         .await
 }
 

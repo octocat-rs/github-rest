@@ -95,3 +95,634 @@ pub struct Issue {
     closed_by: Option<Assignee>,
     author_association: String,
 }
+
+pub type Pulls = Vec<Pull>;
+
+#[derive(Serialize, Deserialize)]
+pub struct Pull {
+    url: String,
+    id: i64,
+    node_id: String,
+    html_url: String,
+    diff_url: String,
+    patch_url: String,
+    issue_url: String,
+    commits_url: String,
+    review_comments_url: String,
+    review_comment_url: String,
+    comments_url: String,
+    statuses_url: String,
+    number: i64,
+    state: String,
+    locked: bool,
+    title: String,
+    user: Assignee,
+    body: String,
+    labels: Vec<Label>,
+    milestone: Milestone,
+    active_lock_reason: String,
+    created_at: String,
+    updated_at: String,
+    closed_at: String,
+    merged_at: String,
+    merge_commit_sha: String,
+    assignee: Assignee,
+    assignees: Vec<Assignee>,
+    requested_reviewers: Vec<Assignee>,
+    requested_teams: Vec<RequestedTeam>,
+    head: Base,
+    base: Base,
+    #[serde(rename = "_links")]
+    links: Links,
+    author_association: String,
+    auto_merge: Option<serde_json::Value>,
+    draft: bool,
+}
+
+// #[derive(Serialize, Deserialize)]
+// pub struct Assignee {
+//     #[serde(rename = "login")]
+//     login: Login,
+
+//     #[serde(rename = "id")]
+//     id: i64,
+
+//     #[serde(rename = "node_id")]
+//     node_id: NodeId,
+
+//     #[serde(rename = "avatar_url")]
+//     avatar_url: String,
+
+//     #[serde(rename = "gravatar_id")]
+//     gravatar_id: String,
+
+//     #[serde(rename = "url")]
+//     url: String,
+
+//     #[serde(rename = "html_url")]
+//     html_url: String,
+
+//     #[serde(rename = "followers_url")]
+//     followers_url: String,
+
+//     #[serde(rename = "following_url")]
+//     following_url: FollowingUrl,
+
+//     #[serde(rename = "gists_url")]
+//     gists_url: GistsUrl,
+
+//     #[serde(rename = "starred_url")]
+//     starred_url: StarredUrl,
+
+//     #[serde(rename = "subscriptions_url")]
+//     subscriptions_url: String,
+
+//     #[serde(rename = "organizations_url")]
+//     organizations_url: String,
+
+//     #[serde(rename = "repos_url")]
+//     repos_url: String,
+
+//     #[serde(rename = "events_url")]
+//     events_url: EventsUrl,
+
+//     #[serde(rename = "received_events_url")]
+//     received_events_url: String,
+
+//     #[serde(rename = "type")]
+//     assignee_type: Type,
+
+//     #[serde(rename = "site_admin")]
+//     site_admin: bool,
+// }
+
+#[derive(Serialize, Deserialize)]
+pub struct Base {
+    #[serde(rename = "label")]
+    label: String,
+
+    #[serde(rename = "ref")]
+    base_ref: String,
+
+    #[serde(rename = "sha")]
+    sha: String,
+
+    #[serde(rename = "user")]
+    user: Assignee,
+
+    #[serde(rename = "repo")]
+    repo: Repo,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Repo {
+    #[serde(rename = "id")]
+    id: i64,
+
+    #[serde(rename = "node_id")]
+    node_id: String,
+
+    #[serde(rename = "name")]
+    name: String,
+
+    #[serde(rename = "full_name")]
+    full_name: String,
+
+    #[serde(rename = "owner")]
+    owner: Assignee,
+
+    #[serde(rename = "private")]
+    private: bool,
+
+    #[serde(rename = "html_url")]
+    html_url: String,
+
+    #[serde(rename = "description")]
+    description: String,
+
+    #[serde(rename = "fork")]
+    fork: bool,
+
+    #[serde(rename = "url")]
+    url: String,
+
+    #[serde(rename = "archive_url")]
+    archive_url: String,
+
+    #[serde(rename = "assignees_url")]
+    assignees_url: String,
+
+    #[serde(rename = "blobs_url")]
+    blobs_url: String,
+
+    #[serde(rename = "branches_url")]
+    branches_url: String,
+
+    #[serde(rename = "collaborators_url")]
+    collaborators_url: String,
+
+    #[serde(rename = "comments_url")]
+    comments_url: String,
+
+    #[serde(rename = "commits_url")]
+    commits_url: String,
+
+    #[serde(rename = "compare_url")]
+    compare_url: String,
+
+    #[serde(rename = "contents_url")]
+    contents_url: String,
+
+    #[serde(rename = "contributors_url")]
+    contributors_url: String,
+
+    #[serde(rename = "deployments_url")]
+    deployments_url: String,
+
+    #[serde(rename = "downloads_url")]
+    downloads_url: String,
+
+    #[serde(rename = "events_url")]
+    events_url: String,
+
+    #[serde(rename = "forks_url")]
+    forks_url: String,
+
+    #[serde(rename = "git_commits_url")]
+    git_commits_url: String,
+
+    #[serde(rename = "git_refs_url")]
+    git_refs_url: String,
+
+    #[serde(rename = "git_tags_url")]
+    git_tags_url: String,
+
+    #[serde(rename = "git_url")]
+    git_url: String,
+
+    #[serde(rename = "issue_comment_url")]
+    issue_comment_url: String,
+
+    #[serde(rename = "issue_events_url")]
+    issue_events_url: String,
+
+    #[serde(rename = "issues_url")]
+    issues_url: String,
+
+    #[serde(rename = "keys_url")]
+    keys_url: String,
+
+    #[serde(rename = "labels_url")]
+    labels_url: String,
+
+    #[serde(rename = "languages_url")]
+    languages_url: String,
+
+    #[serde(rename = "merges_url")]
+    merges_url: String,
+
+    #[serde(rename = "milestones_url")]
+    milestones_url: String,
+
+    #[serde(rename = "notifications_url")]
+    notifications_url: String,
+
+    #[serde(rename = "pulls_url")]
+    pulls_url: String,
+
+    #[serde(rename = "releases_url")]
+    releases_url: String,
+
+    #[serde(rename = "ssh_url")]
+    ssh_url: String,
+
+    #[serde(rename = "stargazers_url")]
+    stargazers_url: String,
+
+    #[serde(rename = "statuses_url")]
+    statuses_url: String,
+
+    #[serde(rename = "subscribers_url")]
+    subscribers_url: String,
+
+    #[serde(rename = "subscription_url")]
+    subscription_url: String,
+
+    #[serde(rename = "tags_url")]
+    tags_url: String,
+
+    #[serde(rename = "teams_url")]
+    teams_url: String,
+
+    #[serde(rename = "trees_url")]
+    trees_url: String,
+
+    #[serde(rename = "clone_url")]
+    clone_url: String,
+
+    #[serde(rename = "mirror_url")]
+    mirror_url: String,
+
+    #[serde(rename = "hooks_url")]
+    hooks_url: String,
+
+    #[serde(rename = "svn_url")]
+    svn_url: String,
+
+    #[serde(rename = "homepage")]
+    homepage: String,
+
+    #[serde(rename = "language")]
+    language: Option<serde_json::Value>,
+
+    #[serde(rename = "forks_count")]
+    forks_count: i64,
+
+    #[serde(rename = "stargazers_count")]
+    stargazers_count: i64,
+
+    #[serde(rename = "watchers_count")]
+    watchers_count: i64,
+
+    #[serde(rename = "size")]
+    size: i64,
+
+    #[serde(rename = "default_branch")]
+    default_branch: String,
+
+    #[serde(rename = "open_issues_count")]
+    open_issues_count: i64,
+
+    #[serde(rename = "is_template")]
+    is_template: bool,
+
+    #[serde(rename = "topics")]
+    topics: Vec<String>,
+
+    #[serde(rename = "has_issues")]
+    has_issues: bool,
+
+    #[serde(rename = "has_projects")]
+    has_projects: bool,
+
+    #[serde(rename = "has_wiki")]
+    has_wiki: bool,
+
+    #[serde(rename = "has_pages")]
+    has_pages: bool,
+
+    #[serde(rename = "has_downloads")]
+    has_downloads: bool,
+
+    #[serde(rename = "archived")]
+    archived: bool,
+
+    #[serde(rename = "disabled")]
+    disabled: bool,
+
+    #[serde(rename = "visibility")]
+    visibility: String,
+
+    #[serde(rename = "pushed_at")]
+    pushed_at: String,
+
+    #[serde(rename = "created_at")]
+    created_at: String,
+
+    #[serde(rename = "updated_at")]
+    updated_at: String,
+
+    #[serde(rename = "permissions")]
+    permissions: Permissions,
+
+    #[serde(rename = "allow_rebase_merge")]
+    allow_rebase_merge: bool,
+
+    #[serde(rename = "template_repository")]
+    template_repository: Option<serde_json::Value>,
+
+    #[serde(rename = "temp_clone_token")]
+    temp_clone_token: String,
+
+    #[serde(rename = "allow_squash_merge")]
+    allow_squash_merge: bool,
+
+    #[serde(rename = "allow_auto_merge")]
+    allow_auto_merge: bool,
+
+    #[serde(rename = "delete_branch_on_merge")]
+    delete_branch_on_merge: bool,
+
+    #[serde(rename = "allow_merge_commit")]
+    allow_merge_commit: bool,
+
+    #[serde(rename = "subscribers_count")]
+    subscribers_count: i64,
+
+    #[serde(rename = "network_count")]
+    network_count: i64,
+
+    #[serde(rename = "license")]
+    license: License,
+
+    #[serde(rename = "forks")]
+    forks: i64,
+
+    #[serde(rename = "open_issues")]
+    open_issues: i64,
+
+    #[serde(rename = "watchers")]
+    watchers: i64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct License {
+    #[serde(rename = "key")]
+    key: String,
+
+    #[serde(rename = "name")]
+    name: String,
+
+    #[serde(rename = "url")]
+    url: String,
+
+    #[serde(rename = "spdx_id")]
+    spdx_id: String,
+
+    #[serde(rename = "node_id")]
+    node_id: String,
+
+    #[serde(rename = "html_url")]
+    html_url: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Permissions {
+    #[serde(rename = "admin")]
+    admin: bool,
+
+    #[serde(rename = "push")]
+    push: bool,
+
+    #[serde(rename = "pull")]
+    pull: bool,
+}
+
+// #[derive(Serialize, Deserialize)]
+// pub struct Label {
+//     #[serde(rename = "id")]
+//     id: i64,
+
+//     #[serde(rename = "node_id")]
+//     node_id: String,
+
+//     #[serde(rename = "url")]
+//     url: String,
+
+//     #[serde(rename = "name")]
+//     name: String,
+
+//     #[serde(rename = "description")]
+//     description: String,
+
+//     #[serde(rename = "color")]
+//     color: String,
+
+//     #[serde(rename = "default")]
+//     label_default: bool,
+// }
+
+#[derive(Serialize, Deserialize)]
+pub struct Links {
+    #[serde(rename = "self")]
+    links_self: Comments,
+
+    #[serde(rename = "html")]
+    html: Comments,
+
+    #[serde(rename = "issue")]
+    issue: Comments,
+
+    #[serde(rename = "comments")]
+    comments: Comments,
+
+    #[serde(rename = "review_comments")]
+    review_comments: Comments,
+
+    #[serde(rename = "review_comment")]
+    review_comment: Comments,
+
+    #[serde(rename = "commits")]
+    commits: Comments,
+
+    #[serde(rename = "statuses")]
+    statuses: Comments,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Comments {
+    #[serde(rename = "href")]
+    href: String,
+}
+
+// #[derive(Serialize, Deserialize)]
+// pub struct Milestone {
+//     #[serde(rename = "url")]
+//     url: String,
+
+//     #[serde(rename = "html_url")]
+//     html_url: String,
+
+//     #[serde(rename = "labels_url")]
+//     labels_url: String,
+
+//     #[serde(rename = "id")]
+//     id: i64,
+
+//     #[serde(rename = "node_id")]
+//     node_id: String,
+
+//     #[serde(rename = "number")]
+//     number: i64,
+
+//     #[serde(rename = "state")]
+//     state: String,
+
+//     #[serde(rename = "title")]
+//     title: String,
+
+//     #[serde(rename = "description")]
+//     description: String,
+
+//     #[serde(rename = "creator")]
+//     creator: Assignee,
+
+//     #[serde(rename = "open_issues")]
+//     open_issues: i64,
+
+//     #[serde(rename = "closed_issues")]
+//     closed_issues: i64,
+
+//     #[serde(rename = "created_at")]
+//     created_at: String,
+
+//     #[serde(rename = "updated_at")]
+//     updated_at: String,
+
+//     #[serde(rename = "closed_at")]
+//     closed_at: String,
+
+//     #[serde(rename = "due_on")]
+//     due_on: String,
+// }
+
+#[derive(Serialize, Deserialize)]
+pub struct RequestedTeam {
+    #[serde(rename = "id")]
+    id: i64,
+
+    #[serde(rename = "node_id")]
+    node_id: String,
+
+    #[serde(rename = "url")]
+    url: String,
+
+    #[serde(rename = "html_url")]
+    html_url: String,
+
+    #[serde(rename = "name")]
+    name: String,
+
+    #[serde(rename = "slug")]
+    slug: String,
+
+    #[serde(rename = "description")]
+    description: String,
+
+    #[serde(rename = "privacy")]
+    privacy: String,
+
+    #[serde(rename = "permission")]
+    permission: String,
+
+    #[serde(rename = "members_url")]
+    members_url: String,
+
+    #[serde(rename = "repositories_url")]
+    repositories_url: String,
+
+    #[serde(rename = "parent")]
+    parent: Option<serde_json::Value>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum Type {
+    #[serde(rename = "User")]
+    User,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum EventsUrl {
+    #[serde(rename = "https://api.github.com/users/hubot/events{/privacy}")]
+    HttpsApiGithubComUsersHubotEventsPrivacy,
+
+    #[serde(rename = "https://api.github.com/users/octocat/events{/privacy}")]
+    HttpsApiGithubComUsersOctocatEventsPrivacy,
+
+    #[serde(rename = "https://api.github.com/users/other_user/events{/privacy}")]
+    HttpsApiGithubComUsersOtherUserEventsPrivacy,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum FollowingUrl {
+    #[serde(rename = "https://api.github.com/users/hubot/following{/other_user}")]
+    HttpsApiGithubComUsersHubotFollowingOtherUser,
+
+    #[serde(rename = "https://api.github.com/users/octocat/following{/other_user}")]
+    HttpsApiGithubComUsersOctocatFollowingOtherUser,
+
+    #[serde(rename = "https://api.github.com/users/other_user/following{/other_user}")]
+    HttpsApiGithubComUsersOtherUserFollowingOtherUser,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum GistsUrl {
+    #[serde(rename = "https://api.github.com/users/hubot/gists{/gist_id}")]
+    HttpsApiGithubComUsersHubotGistsGistId,
+
+    #[serde(rename = "https://api.github.com/users/octocat/gists{/gist_id}")]
+    HttpsApiGithubComUsersOctocatGistsGistId,
+
+    #[serde(rename = "https://api.github.com/users/other_user/gists{/gist_id}")]
+    HttpsApiGithubComUsersOtherUserGistsGistId,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum Login {
+    #[serde(rename = "hubot")]
+    Hubot,
+
+    #[serde(rename = "octocat")]
+    Octocat,
+
+    #[serde(rename = "other_user")]
+    OtherUser,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum NodeId {
+    #[serde(rename = "MDQ6VXNlcjE=")]
+    Mdq6VxNlcjE,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum StarredUrl {
+    #[serde(rename = "https://api.github.com/users/hubot/starred{/owner}{/repo}")]
+    HttpsApiGithubComUsersHubotStarredOwnerRepo,
+
+    #[serde(rename = "https://api.github.com/users/octocat/starred{/owner}{/repo}")]
+    HttpsApiGithubComUsersOctocatStarredOwnerRepo,
+
+    #[serde(rename = "https://api.github.com/users/other_user/starred{/owner}{/repo}")]
+    HttpsApiGithubComUsersOtherUserStarredOwnerRepo,
+}
