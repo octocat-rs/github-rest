@@ -9,7 +9,8 @@ use serde::{de::DeserializeOwned, Serialize};
 pub mod client;
 pub mod methods;
 pub mod structs;
-
+//TODO: lock this behind a feature
+pub mod builders;
 //TODO WRITE macros for structs to have everything be getters (?)
 
 #[derive(Debug)]

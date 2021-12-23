@@ -41,16 +41,33 @@ where
 //TODO make a builder for this to **it must be completed using .execute()** not `build().execute()`
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GetIssueBody {
-    milestone: Option<String>,
-    state: Option<String>,
-    assignee: Option<String>,
-    creator: Option<String>,
-    mentioned: Option<String>,
-    labels: Option<String>,
-    sort: Option<String>,
-    direction: Option<String>,
-    per_page: Option<String>,
-    page: Option<String>,
+    ///If an integer is passed, it should refer to a milestone by its number field. If the string * is passed, issues with any milestone are accepted. If the string none is passed, issues without milestones are returned.
+    pub milestone: Option<String>,
+    ///Indicates the state of the issues to return. Can be either open, closed, or all.
+    ///Default: open
+    pub state: Option<String>,
+    ///Can be the name of a user. Pass in none for issues with no assigned user, and * for issues assigned to any user.
+    pub assignee: Option<String>,
+    ///The user that created the issue.
+    pub creator: Option<String>,
+    ///A user that's mentioned in the issue.
+    pub mentioned: Option<String>,
+    ///A list of comma separated label names. Example: bug,ui,@high
+    pub labels: Option<String>,
+    ///What to sort results by. Can be either created, updated, comments.
+    ///Default: created
+    pub sort: Option<String>,
+    ///One of asc (ascending) or desc (descending).
+    ///Default: desc
+    pub direction: Option<String>,
+    ///Only show notifications updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+    pub since: Option<String>,
+    ///Results per page (max 100)
+    ///Default: 30
+    pub per_page: Option<String>,
+    ///Page number of the results to fetch.
+    ///Default: 1
+    pub page: Option<String>,
 }
 
 /// * tags issues
@@ -127,6 +144,7 @@ mod tests {
             mentioned: None,
             labels: None,
             sort: None,
+            since: None,
             direction: None,
             per_page: Some("1".to_owned()),
             page: None,
