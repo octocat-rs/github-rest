@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde::Serialize;
-
+use super::User;
 pub type Commits = Vec<Commit>;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -107,3 +107,24 @@ pub struct Parent {
     pub url: String,
     pub html_url: String,
 }
+
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Comment {
+    pub html_url: String,
+    pub url: String,
+    pub id: i64,
+    pub node_id: String,
+    pub body: String,
+    pub path: String,
+    pub position: i64,
+    pub line: i64,
+    pub commit_id: String,
+    pub author_association: String,
+    pub user: User,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+
+

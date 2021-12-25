@@ -67,6 +67,44 @@ where
         .await
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct CommentOnCommitBody {
+    ///**Required**. The contents of the comment.
+    body: String,
+    ///	Relative path of the file to comment on.
+    path: Option<String>,
+    ///Line index in the diff to comment on.
+    position: Option<String>,
+    ///**Deprecated**. Use position parameter instead. Line number in the file to comment on.
+    line: Option<String>,
+}
+/// * tags repos
+/// * post `/repos/{owner}/{repo}/commits/{commit_sha}/comments`
+/// * docs <https://docs.github.com/rest/reference/repos#create-a-commit-comment>
+///
+/// Create a commit comment
+/// Create a comment for a commit using its `:commit_sha`.
+///
+/// This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
+pub async fn comment_on_commit<T>(
+    client: &T,
+    owner: String,
+    repo: String,
+    sha: String,
+    options: CommentOnCommitBody,
+) -> Result<Commits, GithubRestError>
+where
+    T: Requester,
+{
+    client
+        .req::<CommentOnCommitBody, String, Commits>(
+            EndPoints::PostReposownerrepoCommitscommitShaComments(owner, repo, sha),
+            Some(&options),
+            None,
+        )
+        .await
+}
+
 #[cfg(test)]
 mod tests {
     use crate::client::DefaultRequest;
