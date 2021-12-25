@@ -1,6 +1,8 @@
+pub use commits::*;
 pub use issues::*;
 pub use misc::*;
 
+mod commits;
 mod issues;
 mod misc;
 

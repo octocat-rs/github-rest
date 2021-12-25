@@ -1,6 +1,6 @@
 use super::prelude::*;
 
-//TODO make a builder for this to **it must be completed using .execute()** not `build().execute()`
+//TODO make a builder for this
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CreateIssueBody {
     title: String,
