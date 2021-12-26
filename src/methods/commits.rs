@@ -70,13 +70,13 @@ where
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CommentOnCommitBody {
     ///**Required**. The contents of the comment.
-    body: String,
+    pub body: String,
     ///	Relative path of the file to comment on.
-    path: Option<String>,
+    pub path: Option<String>,
     ///Line index in the diff to comment on.
-    position: Option<String>,
+    pub position: Option<String>,
     ///**Deprecated**. Use position parameter instead. Line number in the file to comment on.
-    line: Option<String>,
+    pub line: Option<String>,
 }
 /// * tags repos
 /// * post `/repos/{owner}/{repo}/commits/{commit_sha}/comments`
@@ -92,12 +92,12 @@ pub async fn comment_on_commit<T>(
     repo: String,
     sha: String,
     options: CommentOnCommitBody,
-) -> Result<Commits, GithubRestError>
+) -> Result<Comment, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<CommentOnCommitBody, String, Commits>(
+        .req::<CommentOnCommitBody, String, Comment>(
             EndPoints::PostReposownerrepoCommitscommitShaComments(owner, repo, sha),
             Some(&options),
             None,
