@@ -10,10 +10,11 @@ use crate::{
 /// List repository issues
 /// List issues in a repository.
 ///
-/// **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this
-/// reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by
-/// the `pull_request` key. Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull
-/// request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
+/// **Note**: GitHub's REST API v3 considers every pull request an issue, but
+/// not every issue is a pull request. For this reason, "Issues" endpoints may
+/// return both issues and pull requests in the response. You can identify pull
+/// requests by the `pull_request` key. Be aware that the `id` of a pull request
+/// returned from "Issues" endpoints will be an _issue id_. To find out the pull request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
 pub struct GetIssuesBuilder {
     data: (String, String),
     body: GetIssueBody,
@@ -99,7 +100,8 @@ mod tests {
         let reqester = DefaultRequest::new_none();
 
         let mut builder = GetIssuesBuilder::new("microsoft".to_owned(), "vscode".to_owned());
-        builder.per_page(1).page(2).state("open".to_owned()); // builder.per_page(1).page(2).state("open".to_owned()).execute(&reqester).await.unwrap() - works too
+        builder.per_page(1).page(2).state("open".to_owned()); // builder.per_page(1).page(2).state("open".to_owned()).execute(&reqester).
+                                                              // await.unwrap() - works too
         let r = builder.execute(&reqester).await.unwrap();
         println!("{:#?}", r)
     }

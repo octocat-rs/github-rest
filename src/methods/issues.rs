@@ -40,12 +40,16 @@ where
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GetIssueBody {
-    ///If an integer is passed, it should refer to a milestone by its number field. If the string * is passed, issues with any milestone are accepted. If the string none is passed, issues without milestones are returned.
+    ///If an integer is passed, it should refer to a milestone by its number
+    /// field. If the string * is passed, issues with any milestone are
+    /// accepted. If the string none is passed, issues without milestones are
+    /// returned.
     pub milestone: Option<String>,
-    ///Indicates the state of the issues to return. Can be either open, closed, or all.
-    ///Default: open
+    ///Indicates the state of the issues to return. Can be either open, closed,
+    /// or all. Default: open
     pub state: Option<String>,
-    ///Can be the name of a user. Pass in none for issues with no assigned user, and * for issues assigned to any user.
+    ///Can be the name of a user. Pass in none for issues with no assigned
+    /// user, and * for issues assigned to any user.
     pub assignee: Option<String>,
     ///The user that created the issue.
     pub creator: Option<String>,
@@ -59,7 +63,8 @@ pub struct GetIssueBody {
     ///One of asc (ascending) or desc (descending).
     ///Default: desc
     pub direction: Option<String>,
-    ///Only show notifications updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+    ///Only show notifications updated after the given time. This is a
+    /// timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
     pub since: Option<String>,
     ///Results per page (max 100)
     ///Default: 30
@@ -76,10 +81,11 @@ pub struct GetIssueBody {
 /// List repository issues
 /// List issues in a repository.
 ///
-/// **Note**: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this
-/// reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by
-/// the `pull_request` key. Be aware that the `id` of a pull request returned from "Issues" endpoints will be an _issue id_. To find out the pull
-/// request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
+/// **Note**: GitHub's REST API v3 considers every pull request an issue, but
+/// not every issue is a pull request. For this reason, "Issues" endpoints may
+/// return both issues and pull requests in the response. You can identify pull
+/// requests by the `pull_request` key. Be aware that the `id` of a pull request
+/// returned from "Issues" endpoints will be an _issue id_. To find out the pull request id, use the "[List pull requests](https://docs.github.com/rest/reference/pulls#list-pull-requests)" endpoint.
 pub async fn get_issues<T>(
     client: &T,
     owner: String,
@@ -94,24 +100,29 @@ where
         .await
 }
 
-//TODO make a builder for this to **it must be completed using .execute()** not `build().execute()`
+//TODO make a builder for this to **it must be completed using .execute()** not
+// `build().execute()`
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GetPullsBody {
     //TODO: write a enum for this
     ///Either open, closed, or all to filter by state.
     ///Default: open
     pub state: Option<String>,
-    ///Filter pulls by head user or head organization and branch name in the format of user:ref-name or organization:ref-name. For example: github:new-script-format or octocat:test-branch.
+    ///Filter pulls by head user or head organization and branch name in the
+    /// format of user:ref-name or organization:ref-name. For example:
+    /// github:new-script-format or octocat:test-branch.
     pub head: Option<String>,
     ///Filter pulls by base branch name. Example: gh-pages.
     pub base: Option<String>,
-    ///What to sort results by. Can be either created, updated, popularity (comment count) or long-running (age, filtering by pulls updated in the last month).
-    ///Default: created
+    ///What to sort results by. Can be either created, updated, popularity
+    /// (comment count) or long-running (age, filtering by pulls updated in the
+    /// last month). Default: created
     pub sort: Option<String>,
     ///One of asc (ascending) or desc (descending).
     ///Default: desc
     pub direction: Option<String>,
-    ///Only show notifications updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+    ///Only show notifications updated after the given time. This is a
+    /// timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
     pub since: Option<String>,
     ///Results per page (max 100)
     ///Default: 30
