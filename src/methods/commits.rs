@@ -80,13 +80,13 @@ where
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CommentOnCommitBody {
-    ///**Required**. The contents of the comment.
+    /// **Required**. The contents of the comment.
     pub body: String,
     /// Relative path of the file to comment on.
     pub path: Option<String>,
-    ///Line index in the diff to comment on.
+    /// Line index in the diff to comment on.
     pub position: Option<String>,
-    ///**Deprecated**. Use position parameter instead. Line number in the file
+    /// **Deprecated**. Use position parameter instead. Line number in the file
     /// to comment on.
     pub line: Option<String>,
 }

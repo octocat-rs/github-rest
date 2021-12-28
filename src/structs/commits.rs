@@ -1,5 +1,11 @@
 use serde::{Deserialize, Serialize};
 
+use crate::{
+    methods::{comment_on_commit, CommentOnCommitBody},
+    structs::nested::Comment,
+    GithubRestError, Requester,
+};
+
 pub type Commits = Vec<Commit>;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -15,10 +21,57 @@ pub struct Commit {
     pub parents: Vec<nested::Parent>,
 }
 
+impl Commit {
+    // TODO(octocat): Make end user not have to pass self.http_client everywhere.
+    // The above will require a bit more brainstorming on my part, as this issue
+    // will persist everywhere such functions are implemented.
+
+    // Additionally, Octocat's command interface may need a rework as a result of
+    // the aforementioned issue
+
+    /// Adds a comment to the current instance.
+    pub async fn add_comment<T>(
+        &self,
+        client: &T,
+        body: String,
+        path: Option<String>,
+        position: Option<String>,
+    ) -> Result<Comment, GithubRestError>
+    where
+        T: Requester,
+    {
+        let options = CommentOnCommitBody {
+            body,
+            path,
+            position,
+            line: None,
+        };
+
+        // TODO: Make a less disgusting method
+        // Filters out the useless portions
+        let f = |s: &str| {
+            if s.contains("https:") || s.is_empty() || s.eq("github.com") {
+                None
+            } else {
+                Some(s.to_owned())
+            }
+        };
+
+        let (owner, repo) = {
+            let split: Vec<String> = self.html_url.split('/').filter_map(f).collect();
+
+            (split[0].clone(), split[1].clone())
+        };
+
+        comment_on_commit(client, owner, repo, self.sha.clone(), options).await
+    }
+}
+
 pub mod nested {
+    use serde::{Deserialize, Serialize};
+
     // TODO: Create better names for these structs
     use crate::structs::User;
-    use serde::{Serialize, Deserialize};
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Commit {
