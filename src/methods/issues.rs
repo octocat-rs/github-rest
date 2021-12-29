@@ -47,7 +47,7 @@ pub struct GetIssueBody {
     pub milestone: Option<String>,
     ///Indicates the state of the issues to return. Can be either open, closed,
     /// or all. Default: open
-    pub state: Option<String>,
+    pub state: Option<IssueState>,
     ///Can be the name of a user. Pass in none for issues with no assigned
     /// user, and * for issues assigned to any user.
     pub assignee: Option<String>,
@@ -72,6 +72,17 @@ pub struct GetIssueBody {
     ///Page number of the results to fetch.
     ///Default: 1
     pub page: Option<String>,
+}
+
+/// * docs <https://docs.github.com/en/rest/reference/issues#list-issues-assigned-to-the-authenticated-user--parameters>
+///
+/// Represents the state of an issue. Possible variants are open, closed, and all.
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum IssueState {
+    Open,
+    Closed,
+    All,
 }
 
 /// * tags issues
@@ -192,7 +203,7 @@ mod tests {
     }
     #[tokio::test]
     async fn test_get_issues2() {
-        let reqester = DefaultRequest::new_none();
+        let requester = DefaultRequest::new_none();
         let bdy = GetIssueBody {
             milestone: None,
             state: None,
@@ -206,7 +217,7 @@ mod tests {
             per_page: Some("1".to_owned()),
             page: None,
         };
-        let r = get_issues(&reqester, "microsoft".to_owned(), "vscode".to_owned(), Some(&bdy))
+        let r = get_issues(&requester, "microsoft".to_owned(), "vscode".to_owned(), Some(&bdy))
             .await
             .unwrap();
         println!("{:#?}", r)

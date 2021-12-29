@@ -1,5 +1,5 @@
 use crate::{
-    methods::{get_issues, prelude::Issues, GetIssueBody},
+    methods::{get_issues, prelude::Issues, GetIssueBody, IssueState},
     GithubRestError, Requester,
 };
 
@@ -19,6 +19,7 @@ pub struct GetIssuesBuilder {
     data: (String, String),
     body: GetIssueBody,
 }
+
 impl GetIssuesBuilder {
     pub fn new(user: String, repo: String) -> Self {
         GetIssuesBuilder {
@@ -38,50 +39,117 @@ impl GetIssuesBuilder {
             },
         }
     }
-    pub fn milestone(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.milestone = Some(value);
-        self
+
+    pub fn milestone(self, milestone: String) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                milestone: Some(milestone),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn state(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.state = Some(value);
-        self
+
+    pub fn state(self, state: IssueState) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                state: Some(state),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn assignee(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.assignee = Some(value);
-        self
+
+    pub fn assignee(self, assignee: String) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                assignee: Some(assignee),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn creator(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.creator = Some(value);
-        self
+
+    pub fn creator(self, creator: String) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                creator: Some(creator),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn mentioned(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.mentioned = Some(value);
-        self
+
+    pub fn mentioned(self, mentioned: String) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                mentioned: Some(mentioned),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn labels(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.labels = Some(value);
-        self
+
+    pub fn labels(self, labels: String) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                labels: Some(labels),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn sort(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.sort = Some(value);
-        self
+
+    pub fn sort(self, sort: String) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                sort: Some(sort),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn direction(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.direction = Some(value);
-        self
+
+    pub fn direction(self, direction: String) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                direction: Some(direction),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn since(&mut self, value: String) -> &mut GetIssuesBuilder {
-        self.body.since = Some(value);
-        self
+
+    pub fn since(self, since: String) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                since: Some(since),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn per_page(&mut self, value: i32) -> &mut GetIssuesBuilder {
-        self.body.per_page = Some(value.to_string());
-        self
+
+    pub fn per_page(self, count: i32) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                per_page: Some(count.to_string()),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn page(&mut self, value: i32) -> &mut GetIssuesBuilder {
-        self.body.page = Some(value.to_string());
-        self
+
+    pub fn page(self, page: i32) -> GetIssuesBuilder {
+        GetIssuesBuilder {
+            body: GetIssueBody {
+                page: Some(page.to_string()),
+                ..self.body
+            },
+            ..self
+        }
     }
+
     pub async fn execute<T>(self, client: &T) -> Result<Issues, GithubRestError>
     where
         T: Requester,
@@ -89,6 +157,7 @@ impl GetIssuesBuilder {
         get_issues(client, self.data.0, self.data.1, Some(&self.body)).await
     }
 }
+
 #[cfg(test)]
 mod tests {
     use crate::client::DefaultRequest;
@@ -99,9 +168,11 @@ mod tests {
     async fn test_get_issues_builder() {
         let reqester = DefaultRequest::new_none();
 
-        let mut builder = GetIssuesBuilder::new("microsoft".to_owned(), "vscode".to_owned());
-        builder.per_page(1).page(2).state("open".to_owned()); // builder.per_page(1).page(2).state("open".to_owned()).execute(&reqester).
-                                                              // await.unwrap() - works too
+        let builder = GetIssuesBuilder::new("microsoft".to_owned(), "vscode".to_owned())
+            .per_page(1)
+            .page(2)
+            .state(IssueState::Open);
+
         let r = builder.execute(&reqester).await.unwrap();
         println!("{:#?}", r)
     }
