@@ -3,11 +3,15 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use strum::{EnumString, EnumVariantNames};
 
+pub type Pulls = Vec<PullRequest>;
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
 #[strum(serialize_all = "snake_case")]
 pub enum PullRequestAction {
-    //Ive only tested opened so far
     Opened,
+    // = merged/closed
+    Closed,
+    Reopened,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
