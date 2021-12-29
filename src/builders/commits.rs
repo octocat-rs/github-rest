@@ -27,21 +27,29 @@ impl CommentOnCommitBuilder {
             },
         }
     }
-    pub fn body(&mut self, value: String) -> &mut CommentOnCommitBuilder {
-        self.body.body = value;
-        self
+    pub fn body(self, body: String) -> CommentOnCommitBuilder {
+        CommentOnCommitBuilder {
+            body: CommentOnCommitBody { body, ..self.body },
+            ..self
+        }
     }
-    pub fn path(&mut self, value: String) -> &mut CommentOnCommitBuilder {
-        self.body.path = Some(value);
-        self
+    pub fn path(self, path: String) -> CommentOnCommitBuilder {
+        CommentOnCommitBuilder {
+            body: CommentOnCommitBody {
+                path: Some(path),
+                ..self.body
+            },
+            ..self
+        }
     }
-    pub fn position(&mut self, value: String) -> &mut CommentOnCommitBuilder {
-        self.body.position = Some(value);
-        self
-    }
-    pub fn line(&mut self, value: String) -> &mut CommentOnCommitBuilder {
-        self.body.line = Some(value);
-        self
+    pub fn position(self, position: String) -> CommentOnCommitBuilder {
+        CommentOnCommitBuilder {
+            body: CommentOnCommitBody {
+                position: Some(position),
+                ..self.body
+            },
+            ..self
+        }
     }
 
     pub async fn execute<T>(self, client: &T) -> Result<Comment, GithubRestError>

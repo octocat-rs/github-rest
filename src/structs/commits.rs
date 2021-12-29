@@ -1,10 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    methods::{comment_on_commit, CommentOnCommitBody},
-    structs::nested::Comment,
-    GithubRestError, Requester,
-};
+use crate::{builders::CommentOnCommitBuilder, structs::nested::Comment, GithubRestError, Requester};
 
 pub type Commits = Vec<Commit>;
 
@@ -40,13 +36,22 @@ impl Commit {
     where
         T: Requester,
     {
-        let options = CommentOnCommitBody {
-            body,
-            path,
-            position,
-            line: None,
-        };
+        let (owner, repo) = self.owner_and_repo();
 
+        let mut comment = CommentOnCommitBuilder::new(owner, repo, self.sha.clone(), body);
+
+        if let Some(s) = path {
+            comment = comment.path(s);
+        }
+
+        if let Some(s) = position {
+            comment = comment.position(s);
+        }
+
+        comment.execute(client).await
+    }
+
+    fn owner_and_repo(&self) -> (String, String) {
         // TODO: Make a less disgusting method
         // Filters out the useless portions
         let f = |s: &str| {
@@ -57,13 +62,9 @@ impl Commit {
             }
         };
 
-        let (owner, repo) = {
-            let split: Vec<String> = self.html_url.split('/').filter_map(f).collect();
+        let split: Vec<String> = self.html_url.split('/').filter_map(f).collect();
 
-            (split[0].clone(), split[1].clone())
-        };
-
-        comment_on_commit(client, owner, repo, self.sha.clone(), options).await
+        (split[0].clone(), split[1].clone())
     }
 }
 
