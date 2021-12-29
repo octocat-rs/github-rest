@@ -22,3 +22,10 @@ pub struct User {
     pub type_field: String,
     pub site_admin: bool,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SimpleUser {
+    pub name: String,
+    pub email: String,
+    pub username: String,
+}
