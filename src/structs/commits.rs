@@ -18,13 +18,6 @@ pub struct Commit {
 }
 
 impl Commit {
-    // TODO(octocat): Make end user not have to pass self.http_client everywhere.
-    // The above will require a bit more brainstorming on my part, as this issue
-    // will persist everywhere such functions are implemented.
-
-    // Additionally, Octocat's command interface may need a rework as a result of
-    // the aforementioned issue
-
     /// Adds a comment to the current instance.
     pub async fn add_comment<T>(
         &self,
