@@ -59,11 +59,25 @@ impl CommentOnCommitBuilder {
         comment_on_commit(client, self.data.0, self.data.1, self.data.2, self.body).await
     }
 }
+
+#[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
+    use crate::{builders::CommentOnCommitBuilder, client::DefaultRequest};
 
+    #[cfg(feature = "client")]
     #[tokio::test]
     async fn test_comment_on_commit() {
-        todo!()
+        let comment = CommentOnCommitBuilder::new(
+            "octocat-rs".to_owned(),
+            "github-rest".to_owned(),
+            "2eb7eeba66a6adf2168391d0cd6dcac995a34489".to_owned(),
+            "Losing my mind".to_owned(),
+        );
+
+        // You'll need to add your auth to get this to pass
+        let a = comment.execute(&DefaultRequest::new_none()).await.unwrap();
+
+        dbg!(a);
     }
 }

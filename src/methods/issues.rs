@@ -76,7 +76,8 @@ pub struct GetIssueBody {
 
 /// * docs <https://docs.github.com/en/rest/reference/issues#list-issues-assigned-to-the-authenticated-user--parameters>
 ///
-/// Represents the state of an issue. Possible variants are open, closed, and all.
+/// Represents the state of an issue. Possible variants are open, closed, and
+/// all.
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum IssueState {

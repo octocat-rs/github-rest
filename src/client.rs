@@ -63,12 +63,15 @@ impl Requester for DefaultRequest {
             Methods::Patch => self.client.patch(path),
             Methods::Delete => self.client.delete(path),
         };
+
         if let Some(query) = query {
             req = req.query(query)
         }
+
         if let Some(body) = body {
             req = req.body(body)
         }
+
         let res = req.send().await?;
 
         match res.status().as_u16() {
