@@ -6,12 +6,13 @@ use github_api::end_points::EndPoints;
 use reqwest::{Body, StatusCode};
 use serde::{de::DeserializeOwned, Serialize};
 
+pub use github_api::end_points;
+#[cfg(feature = "builders")]
+pub mod builders;
+#[cfg(feature = "client")]
 pub mod client;
 pub mod methods;
 pub mod structs;
-//TODO: lock this behind a feature
-pub mod builders;
-//TODO WRITE macros for structs to have everything be getters (?)
 
 #[derive(Debug)]
 pub enum GithubRestError {

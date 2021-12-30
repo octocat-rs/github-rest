@@ -117,6 +117,7 @@ where
         .await
 }
 
+#[cfg(feature = "client")]
 #[cfg(test)]
 mod tests {
     use crate::client::DefaultRequest;
