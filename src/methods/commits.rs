@@ -109,10 +109,10 @@ where
     T: Requester,
 {
     client
-        .req::<CommentOnCommitBody, String, Comment>(
+        .req::<String, String, Comment>(
             EndPoints::PostReposownerrepoCommitscommitShaComments(owner, repo, sha),
-            Some(&options),
             None,
+            Some(serde_json::to_string(&options)?),
         )
         .await
 }
