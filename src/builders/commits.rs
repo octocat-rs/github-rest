@@ -15,6 +15,7 @@ pub struct CommentOnCommitBuilder {
     data: (String, String, String),
     body: CommentOnCommitBody,
 }
+
 impl CommentOnCommitBuilder {
     pub fn new(user: String, repo: String, hash: String, content: String) -> Self {
         CommentOnCommitBuilder {
@@ -27,29 +28,17 @@ impl CommentOnCommitBuilder {
             },
         }
     }
-    pub fn body(self, body: String) -> CommentOnCommitBuilder {
-        CommentOnCommitBuilder {
-            body: CommentOnCommitBody { body, ..self.body },
-            ..self
-        }
+    pub fn body(mut self, body: String) -> CommentOnCommitBuilder {
+        self.body.body = body;
+        self
     }
-    pub fn path(self, path: String) -> CommentOnCommitBuilder {
-        CommentOnCommitBuilder {
-            body: CommentOnCommitBody {
-                path: Some(path),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn path(mut self, path: String) -> CommentOnCommitBuilder {
+        self.body.path = Some(path);
+        self
     }
-    pub fn position(self, position: String) -> CommentOnCommitBuilder {
-        CommentOnCommitBuilder {
-            body: CommentOnCommitBody {
-                position: Some(position),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn position(mut self, position: String) -> CommentOnCommitBuilder {
+        self.body.position = Some(position);
+        self
     }
 
     pub async fn execute<T>(self, client: &T) -> Result<Comment, GithubRestError>

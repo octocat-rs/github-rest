@@ -40,114 +40,59 @@ impl GetIssuesBuilder {
         }
     }
 
-    pub fn milestone(self, milestone: String) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                milestone: Some(milestone),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn milestone(mut self, milestone: String) -> GetIssuesBuilder {
+        self.body.milestone = Some(milestone);
+        self
     }
 
-    pub fn state(self, state: IssueState) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                state: Some(state),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn state(mut self, state: IssueState) -> GetIssuesBuilder {
+        self.body.state = Some(state);
+        self
     }
 
-    pub fn assignee(self, assignee: String) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                assignee: Some(assignee),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn assignee(mut self, assignee: String) -> GetIssuesBuilder {
+        self.body.assignee = Some(assignee);
+        self
     }
 
-    pub fn creator(self, creator: String) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                creator: Some(creator),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn creator(mut self, creator: String) -> GetIssuesBuilder {
+        self.body.creator = Some(creator);
+        self
     }
 
-    pub fn mentioned(self, mentioned: String) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                mentioned: Some(mentioned),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn mentioned(mut self, mentioned: String) -> GetIssuesBuilder {
+        self.body.mentioned = Some(mentioned);
+        self
     }
 
-    pub fn labels(self, labels: String) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                labels: Some(labels),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn labels(mut self, labels: String) -> GetIssuesBuilder {
+        self.body.labels = Some(labels);
+        self
     }
 
-    pub fn sort(self, sort: String) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                sort: Some(sort),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn sort(mut self, sort: String) -> GetIssuesBuilder {
+        self.body.sort = Some(sort);
+        self
     }
 
-    pub fn direction(self, direction: String) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                direction: Some(direction),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn direction(mut self, direction: String) -> GetIssuesBuilder {
+        self.body.direction = Some(direction);
+        self
     }
 
-    pub fn since(self, since: String) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                since: Some(since),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn since(mut self, since: String) -> GetIssuesBuilder {
+        self.body.since = Some(since);
+        self
     }
 
-    pub fn per_page(self, count: i32) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                per_page: Some(count.to_string()),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn per_page(mut self, count: i32) -> GetIssuesBuilder {
+        self.body.per_page = Some(count.to_string());
+        self
     }
 
-    pub fn page(self, page: i32) -> GetIssuesBuilder {
-        GetIssuesBuilder {
-            body: GetIssueBody {
-                page: Some(page.to_string()),
-                ..self.body
-            },
-            ..self
-        }
+    pub fn page(mut self, page: i32) -> GetIssuesBuilder {
+        self.body.page = Some(page.to_string());
+        self
     }
 
     pub async fn execute<T>(self, client: &T) -> Result<Issues, GithubRestError>

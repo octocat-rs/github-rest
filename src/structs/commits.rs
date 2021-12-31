@@ -140,9 +140,28 @@ pub mod nested {
         pub position: Option<i64>,
         pub line: Option<i64>,
         pub commit_id: String,
-        pub author_association: String,
+        pub author_association: Association,
         pub user: User,
         pub created_at: String,
         pub updated_at: String,
+    }
+
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+    pub enum Association {
+        Collaborator,
+        Contributor,
+        FirstTimer,
+        FirstTimeContributor,
+        Mannequin,
+        Member,
+        None,
+        Owner,
+    }
+
+    impl Default for Association {
+        fn default() -> Self {
+            Association::None
+        }
     }
 }
