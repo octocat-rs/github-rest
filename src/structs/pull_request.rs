@@ -33,7 +33,7 @@ pub struct PullRequest {
     pub patch_url: String,
     pub issue_url: String,
     pub number: i64,
-    pub state: String,
+    pub state: PullRequestState,
     pub locked: bool,
     pub title: String,
     pub user: User,
@@ -63,9 +63,9 @@ pub struct PullRequest {
     pub auto_merge: Value,
     pub active_lock_reason: Value,
     pub merged: bool,
-    pub mergeable: Value,
-    pub rebaseable: Value,
-    pub mergeable_state: String,
+    pub mergeable: Option<bool>, // Don't know if these two can be null so just to be safe(?)
+    pub rebaseable: Option<bool>,
+    pub mergeable_state: String, // Docs really didn't help me when I attempted to create an enum for this
     pub merged_by: Value,
     pub comments: i64,
     pub review_comments: i64,
@@ -74,6 +74,21 @@ pub struct PullRequest {
     pub additions: i64,
     pub deletions: i64,
     pub changed_files: i64,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum PullRequestState {
+    Closed,
+    Merged,
+    Open,
+}
+
+
+impl Default for PullRequestState {
+    fn default() -> Self {
+        PullRequestState::Open
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
