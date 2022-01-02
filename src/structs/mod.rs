@@ -10,7 +10,7 @@ pub use repository::*;
 pub use star::*;
 pub use user::*;
 
-mod commits;
+pub(crate) mod commits;
 mod issues;
 mod pull_request;
 mod push;

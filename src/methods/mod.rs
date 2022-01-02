@@ -13,7 +13,7 @@ pub mod prelude {
     pub use serde::{Deserialize, Serialize};
 
     pub use crate::{
-        structs::{nested::*, *},
+        structs::{nested::*, *}, // You're gonna have to fix this I'm tired & have no idea what I should do (I just named the conflicting module push_event_nested )
         GithubRestError, Requester,
     };
 }

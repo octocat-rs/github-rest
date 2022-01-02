@@ -84,7 +84,6 @@ pub enum PullRequestState {
     Open,
 }
 
-
 impl Default for PullRequestState {
     fn default() -> Self {
         PullRequestState::Open

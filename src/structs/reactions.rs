@@ -15,3 +15,19 @@ pub struct Reactions {
     pub rocket: i64,
     pub eyes: i64,
 }
+
+/// See also: <https://docs.github.com/en/rest/reference/reactions#reaction-types>
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ReactionType {
+    #[serde(rename = "+1")]
+    ThumbsUp,
+    #[serde(rename = "-1")]
+    ThumbsDown,
+    Laugh,
+    Confused,
+    Heart,
+    Hooray,
+    Rocket,
+    Eyes,
+}

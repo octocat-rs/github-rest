@@ -1,6 +1,7 @@
 use super::{Repository, SimpleUser, User};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use crate::structs::push::push_event_nested::{Commit, HeadCommit, Pusher};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PushEvent {
@@ -19,39 +20,45 @@ pub struct PushEvent {
     pub commits: Vec<Commit>,
     pub head_commit: HeadCommit,
 }
+pub mod push_event_nested {
+    use serde_json::Value;
+    use serde::Serialize;
+    use serde::Deserialize;
+    use crate::structs::SimpleUser;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Pusher {
-    pub name: String,
-    pub email: String,
-}
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct Pusher {
+        pub name: String,
+        pub email: String,
+    }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Commit {
-    pub id: String,
-    pub tree_id: String,
-    pub distinct: bool,
-    pub message: String,
-    pub timestamp: String,
-    pub url: String,
-    pub author: SimpleUser,
-    pub committer: SimpleUser,
-    pub added: Vec<String>,
-    pub removed: Vec<Value>,
-    pub modified: Vec<Value>,
-}
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct Commit {
+        pub id: String,
+        pub tree_id: String,
+        pub distinct: bool,
+        pub message: String,
+        pub timestamp: String,
+        pub url: String,
+        pub author: SimpleUser,
+        pub committer: SimpleUser,
+        pub added: Vec<String>,
+        pub removed: Vec<Value>,
+        pub modified: Vec<Value>,
+    }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct HeadCommit {
-    pub id: String,
-    pub tree_id: String,
-    pub distinct: bool,
-    pub message: String,
-    pub timestamp: String,
-    pub url: String,
-    pub author: SimpleUser,
-    pub committer: SimpleUser,
-    pub added: Vec<String>,
-    pub removed: Vec<Value>,
-    pub modified: Vec<Value>,
+    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+    pub struct HeadCommit {
+        pub id: String,
+        pub tree_id: String,
+        pub distinct: bool,
+        pub message: String,
+        pub timestamp: String,
+        pub url: String,
+        pub author: SimpleUser,
+        pub committer: SimpleUser,
+        pub added: Vec<String>,
+        pub removed: Vec<Value>,
+        pub modified: Vec<Value>,
+    }
 }

@@ -1,3 +1,6 @@
+use crate::structs::ReactionType;
+use crate::structs::Commit;
+
 use super::prelude::*;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -90,6 +93,7 @@ pub struct CommentOnCommitBody {
     /// to comment on.
     pub line: Option<String>,
 }
+
 /// * tags repos
 /// * post `/repos/{owner}/{repo}/commits/{commit_sha}/comments`
 /// * docs <https://docs.github.com/rest/reference/repos#create-a-commit-comment>
@@ -113,6 +117,27 @@ where
             EndPoints::PostReposownerrepoCommitscommitShaComments(owner, repo, sha),
             None,
             Some(serde_json::to_string(&options)?),
+        )
+        .await
+}
+
+// TODO: Document this + verify that it works
+
+pub async fn react_to_commit_comment<T>(
+    client: &T,
+    owner: String,
+    repo: String,
+    commit_id: String,
+    emoji: ReactionType,
+) -> Result<Commit, GithubRestError>
+where
+    T: Requester,
+{
+    client
+        .req::<String, String, Commit>(
+            EndPoints::PostReposownerrepoCommentscommentIdReactions(owner, repo, commit_id),
+            None,
+            Some(serde_json::to_string(&emoji)?),
         )
         .await
 }
