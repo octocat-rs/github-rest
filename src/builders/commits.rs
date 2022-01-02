@@ -49,12 +49,12 @@ impl CommentOnCommitBuilder {
     }
 }
 
-#[cfg(feature = "client")]
+#[cfg(feature = "builders")]
 #[cfg(test)]
 mod tests {
     use crate::{builders::CommentOnCommitBuilder, client::DefaultRequest};
 
-    #[cfg(feature = "client")]
+    #[cfg(feature = "builders")]
     #[tokio::test]
     async fn test_comment_on_commit() {
         let comment = CommentOnCommitBuilder::new(

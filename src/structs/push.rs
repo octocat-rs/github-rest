@@ -1,7 +1,7 @@
-use super::{Repository, SimpleUser, User};
+use super::{Repository, User};
+use crate::structs::push::push_event_nested::{Commit, HeadCommit, Pusher};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use crate::structs::push::push_event_nested::{Commit, HeadCommit, Pusher};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PushEvent {
@@ -21,10 +21,9 @@ pub struct PushEvent {
     pub head_commit: HeadCommit,
 }
 pub mod push_event_nested {
-    use serde_json::Value;
-    use serde::Serialize;
-    use serde::Deserialize;
     use crate::structs::SimpleUser;
+    use serde::{Deserialize, Serialize};
+    use serde_json::Value;
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Pusher {

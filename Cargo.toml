@@ -20,6 +20,7 @@ async-trait = "0.1.52"
 
 [features]
 default = ["builders"]
+full = ["builders", "client"]
 builders = []
 client = []
 

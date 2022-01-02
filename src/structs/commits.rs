@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{builders::CommentOnCommitBuilder, structs::nested::Comment, GithubRestError, Requester};
+use crate::{builders::CommentOnCommitBuilder, methods::util, structs::nested::Comment, GithubRestError, Requester};
 
 pub type Commits = Vec<Commit>;
 
@@ -29,7 +29,7 @@ impl Commit {
     where
         T: Requester,
     {
-        let (owner, repo) = self.owner_and_repo();
+        let (owner, repo) = util::owner_and_repo(self.html_url.clone());
 
         let mut comment = CommentOnCommitBuilder::new(owner, repo, self.sha.clone(), body);
 
@@ -43,29 +43,17 @@ impl Commit {
 
         comment.execute(client).await
     }
-
-    fn owner_and_repo(&self) -> (String, String) {
-        // TODO: Make a less disgusting method
-        // Filters out the useless portions
-        let f = |s: &str| {
-            if s.contains("https:") || s.is_empty() || s.eq("github.com") {
-                None
-            } else {
-                Some(s.to_owned())
-            }
-        };
-
-        let split: Vec<String> = self.html_url.split('/').filter_map(f).collect();
-
-        (split[0].clone(), split[1].clone())
-    }
 }
 
 pub mod nested {
+    use crate::{
+        methods::{react_to_commit_comment, util},
+        GithubRestError, Requester,
+    };
     use serde::{Deserialize, Serialize};
 
     // TODO: Create better names for these structs
-    use crate::structs::User;
+    use crate::structs::{CommitCommentReactionCreated, Reaction, User};
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Commit {
@@ -144,6 +132,21 @@ pub mod nested {
         pub user: User,
         pub created_at: String,
         pub updated_at: String,
+    }
+
+    impl Comment {
+        pub async fn add_reaction<T>(
+            &self,
+            client: &T,
+            reaction: Reaction,
+        ) -> Result<CommitCommentReactionCreated, GithubRestError>
+        where
+            T: Requester,
+        {
+            let (owner, repo) = util::owner_and_repo(self.html_url.clone());
+
+            react_to_commit_comment(client, owner, repo, self.id, reaction).await
+        }
     }
 
     #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

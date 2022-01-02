@@ -1,3 +1,4 @@
+use crate::structs::User;
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -19,7 +20,7 @@ pub struct Reactions {
 /// See also: <https://docs.github.com/en/rest/reference/reactions#reaction-types>
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
-pub enum ReactionType {
+pub enum Reaction {
     #[serde(rename = "+1")]
     ThumbsUp,
     #[serde(rename = "-1")]
@@ -30,4 +31,20 @@ pub enum ReactionType {
     Hooray,
     Rocket,
     Eyes,
+}
+
+impl Default for Reaction {
+    fn default() -> Self {
+        Reaction::ThumbsUp
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CommitCommentReactionCreated {
+    id: i64,
+    node_id: String,
+    user: User,
+    #[serde(rename = "content")]
+    reaction: Reaction,
+    created_at: String,
 }

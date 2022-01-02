@@ -5,6 +5,7 @@ pub use misc::*;
 mod commits;
 mod issues;
 mod misc;
+pub(crate) mod util;
 
 ///Prelude mod used for methods
 pub mod prelude {
@@ -13,7 +14,7 @@ pub mod prelude {
     pub use serde::{Deserialize, Serialize};
 
     pub use crate::{
-        structs::{nested::*, *}, // You're gonna have to fix this I'm tired & have no idea what I should do (I just named the conflicting module push_event_nested )
+        structs::{nested::*, *},
         GithubRestError, Requester,
     };
 }
