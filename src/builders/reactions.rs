@@ -40,7 +40,7 @@ impl ReactionOnCommitCommentBuilder {
     }
 }
 
-#[cfg(feature = "builders")]
+#[cfg(all(feature = "builders", feature = "client"))]
 #[cfg(test)]
 mod tests {
     use crate::{builders::ReactionOnCommitCommentBuilder, client::DefaultRequest, structs::Reaction};

@@ -103,7 +103,7 @@ impl GetIssuesBuilder {
     }
 }
 
-#[cfg(feature = "client")]
+#[cfg(all(feature = "builders", feature = "client"))]
 #[cfg(test)]
 mod tests {
     use crate::client::DefaultRequest;
