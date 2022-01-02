@@ -26,7 +26,6 @@ impl DefaultRequest {
             header::AUTHORIZATION,
             header::HeaderValue::from_str(auth.as_str()).unwrap(),
         );
-
         let client = reqwest::Client::builder().default_headers(headers).build().unwrap();
         DefaultRequest { client }
     }
@@ -55,7 +54,7 @@ impl Requester for DefaultRequest {
         V: Into<Body> + std::marker::Send,
     {
         let path = format!("https://api.github.com{}", url.path());
-        println!("{}", &path);
+
         let mut req = match url.method() {
             Methods::Get => self.client.get(path),
             Methods::Post => self.client.post(path),

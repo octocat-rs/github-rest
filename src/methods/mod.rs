@@ -1,10 +1,12 @@
 pub use commits::*;
 pub use issues::*;
 pub use misc::*;
+pub use users::*;
 
 mod commits;
 mod issues;
 mod misc;
+mod users;
 pub(crate) mod util;
 
 ///Prelude mod used for methods
