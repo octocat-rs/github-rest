@@ -15,12 +15,12 @@ where
         .await
 }
 
-    /// * tags users
-    /// * get `/user/following`
-    /// * docs <https://docs.github.com/rest/reference/users#list-the-people-the-authenticated-user-follows>
-    ///
-    /// List the people the authenticated user follows
-    /// Lists the people who the authenticated user follows.
+/// * tags users
+/// * get `/user/following`
+/// * docs <https://docs.github.com/rest/reference/users#list-the-people-the-authenticated-user-follows>
+///
+/// List the people the authenticated user follows
+/// Lists the people who the authenticated user follows.
 pub async fn get_following<T>(client: &T, params: Option<&Pagination>) -> Result<Vec<User>, GithubRestError>
 where
     T: Requester,
@@ -49,6 +49,14 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_followers() {
+        //Note this requires auth
+        let reqester = DefaultRequest::new_none();
+        let r = get_followers(&reqester, None).await.unwrap();
+        println!("{:?}", r)
+    }
+
+    #[tokio::test]
+    async fn test_get_following() {
         //Note this requires auth
         let reqester = DefaultRequest::new_none();
         let r = get_followers(&reqester, None).await.unwrap();
