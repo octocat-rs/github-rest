@@ -1,5 +1,10 @@
 use serde::{Deserialize, Serialize};
 
+use crate::{
+    methods::{get_user_followers, get_user_following, Pagination},
+    GithubRestError, Requester,
+};
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct User {
     pub login: String,
@@ -21,6 +26,72 @@ pub struct User {
     #[serde(rename = "type")]
     pub type_field: String,
     pub site_admin: bool,
+}
+
+impl User {
+    /// Get a list of the users that the user in question is following.
+    ///
+    /// * `followers_per_page` - The number of users to get per page. Default is
+    ///   30.
+    /// * `page_number` - The page number of the result to return. Default is 1.
+    pub async fn get_following<T>(
+        self,
+        client: &T,
+        followers_per_page: Option<u8>,
+        page_number: Option<u8>,
+    ) -> Result<Vec<User>, GithubRestError>
+    where
+        T: Requester,
+    {
+        let followers_per_page = Self::get_num_or_default(followers_per_page, 30u8);
+
+        let page_number = Self::get_num_or_default(page_number, 1u8);
+
+        get_user_followers(
+            client,
+            self.login.clone(),
+            Some(&Pagination {
+                per_page: Some(followers_per_page),
+                page: Some(page_number),
+            }),
+        )
+        .await
+    }
+
+    /// Get a list of the users that are following the user in question.
+    ///
+    /// * `followers_per_page` - The number of followers to get per page.
+    ///   Default is 30.
+    /// * `page_number` - The page number of the result to return. Default is 1.
+    pub async fn get_followers<T>(
+        self,
+        client: &T,
+        followers_per_page: Option<u8>,
+        page_number: Option<u8>,
+    ) -> Result<Vec<User>, GithubRestError>
+    where
+        T: Requester,
+    {
+        let followers_per_page = Self::get_num_or_default(followers_per_page, 30u8);
+
+        let page_number = Self::get_num_or_default(page_number, 1u8);
+
+        get_user_following(
+            client,
+            self.login.clone(),
+            Some(&Pagination {
+                per_page: Some(followers_per_page),
+                page: Some(page_number),
+            }),
+        )
+        .await
+    }
+
+    fn get_num_or_default(val: Option<u8>, default: u8) -> String {
+        let n = val.unwrap_or(default);
+
+        n.to_string()
+    }
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

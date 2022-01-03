@@ -30,6 +30,44 @@ where
         .await
 }
 
+/// * tags users
+/// * get `/users/{username}/following`
+/// * docs <https://docs.github.com/rest/reference/users#list-the-people-a-user-follows>
+///
+/// List the people a user follows
+/// Lists the people who the specified user follows.
+pub async fn get_user_following<T>(
+    client: &T,
+    user: String,
+    params: Option<&Pagination>,
+) -> Result<Vec<User>, GithubRestError>
+where
+    T: Requester,
+{
+    client
+        .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowing(user), params, None)
+        .await
+}
+
+/// * tags users
+/// * get `/users/{username}/followers`
+/// * docs <https://docs.github.com/rest/reference/users#list-followers-of-a-user>
+///
+/// List followers of a user
+/// Lists the people following the specified user.
+pub async fn get_user_followers<T>(
+    client: &T,
+    user: String,
+    params: Option<&Pagination>,
+) -> Result<Vec<User>, GithubRestError>
+where
+    T: Requester,
+{
+    client
+        .req::<Pagination, String, Vec<User>>(EndPoints::GetUsersusernameFollowers(user), params, None)
+        .await
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Pagination {
     ///Results per page (max 100)
@@ -49,17 +87,33 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_followers() {
-        //Note this requires auth
-        let reqester = DefaultRequest::new_none();
-        let r = get_followers(&reqester, None).await.unwrap();
-        println!("{:?}", r)
+        // Note: this requires auth
+        let client = DefaultRequest::new_none();
+        let res = get_followers(&client, None).await.unwrap();
+        dbg!(res);
     }
 
     #[tokio::test]
     async fn test_get_following() {
-        //Note this requires auth
-        let reqester = DefaultRequest::new_none();
-        let r = get_followers(&reqester, None).await.unwrap();
-        println!("{:?}", r)
+        // Note: this requires auth
+        let client = DefaultRequest::new_none();
+        let res = get_followers(&client, None).await.unwrap();
+        dbg!(res);
+    }
+
+    #[tokio::test]
+    async fn test_get_user_following() {
+        let client = DefaultRequest::new_none();
+        let res = get_user_following(&client, "proudmuslim-dev".to_owned(), None)
+            .await
+            .unwrap();
+        dbg!(res);
+    }
+
+    #[tokio::test]
+    async fn test_get_user_followers() {
+        let client = DefaultRequest::new_none();
+        let res = get_user_followers(&client, "bors".to_owned(), None).await.unwrap();
+        dbg!(res);
     }
 }
