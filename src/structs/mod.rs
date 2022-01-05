@@ -9,6 +9,7 @@ pub use release::*;
 pub use repository::*;
 pub use star::*;
 pub use user::*;
+pub use workflows::*;
 
 pub(crate) mod commits;
 mod issues;
@@ -19,3 +20,4 @@ mod release;
 mod repository;
 mod star;
 mod user;
+mod workflows;

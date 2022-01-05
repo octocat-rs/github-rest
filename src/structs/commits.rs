@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+use super::User;
 use crate::{builders::CommentOnCommitBuilder, methods::util, structs::nested::Comment, GithubRestError, Requester};
 
 pub type Commits = Vec<Commit>;
@@ -12,8 +13,8 @@ pub struct Commit {
     pub url: String,
     pub html_url: String,
     pub comments_url: String,
-    pub author: nested::Committer,
-    pub committer: nested::Committer,
+    pub author: User,
+    pub committer: User,
     pub parents: Vec<nested::Parent>,
 }
 
@@ -47,7 +48,7 @@ impl Commit {
 
 pub mod nested {
     use crate::{
-        methods::{react_to_commit_comment, util},
+        methods::{prelude::SimpleUser, react_to_commit_comment, util},
         GithubRestError, Requester,
     };
     use serde::{Deserialize, Serialize};
@@ -57,20 +58,13 @@ pub mod nested {
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Commit {
-        pub author: CommitAuthor,
-        pub committer: CommitAuthor,
+        pub author: SimpleUser,
+        pub committer: SimpleUser,
         pub message: String,
         pub tree: Tree,
         pub url: String,
         pub comment_count: i64,
         pub verification: Verification,
-    }
-
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct CommitAuthor {
-        pub name: String,
-        pub email: String,
-        pub date: String,
     }
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -85,29 +79,6 @@ pub mod nested {
         pub reason: String,
         pub signature: Option<String>,
         pub payload: Option<String>,
-    }
-
-    #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct Committer {
-        pub login: String,
-        pub id: i64,
-        pub node_id: String,
-        pub avatar_url: String,
-        pub gravatar_id: String,
-        pub url: String,
-        pub html_url: String,
-        pub followers_url: String,
-        pub following_url: String,
-        pub gists_url: String,
-        pub starred_url: String,
-        pub subscriptions_url: String,
-        pub organizations_url: String,
-        pub repos_url: String,
-        pub events_url: String,
-        pub received_events_url: String,
-        #[serde(rename = "type")]
-        pub type_field: String,
-        pub site_admin: bool,
     }
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

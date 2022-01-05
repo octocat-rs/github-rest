@@ -98,5 +98,5 @@ impl User {
 pub struct SimpleUser {
     pub name: String,
     pub email: String,
-    pub username: String,
+    pub username: Option<String>,
 }
