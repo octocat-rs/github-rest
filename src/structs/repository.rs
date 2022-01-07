@@ -3,6 +3,13 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ForkEvent {
+    forkee: Repository,
+    repository: Repository,
+    sender: User,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Repository {
     pub id: i64,
     pub node_id: String,
