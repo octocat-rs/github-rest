@@ -1,0 +1,6 @@
+[alias]
+b = "build --features full"
+c = "clippy --features full"
+d = "doc --features full"
+t = "test --features full"
+

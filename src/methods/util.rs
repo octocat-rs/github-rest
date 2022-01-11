@@ -1,5 +1,5 @@
 /// Gets the owner and repository from the `html_url` field used by so many of
-/// our structs.
+/// our model.
 pub fn owner_and_repo(html_url: String) -> (String, String) {
     let f = |s: &str| {
         if s.contains("https:") || s.is_empty() || s.eq("github.com") {

@@ -1,4 +1,4 @@
-use crate::structs::Reaction;
+use crate::model::Reaction;
 
 use super::prelude::*;
 

@@ -16,7 +16,7 @@ pub mod prelude {
     pub use serde::{Deserialize, Serialize};
 
     pub use crate::{
-        structs::{nested::*, *},
+        model::{nested::*, *},
         GithubRestError, Requester,
     };
 }

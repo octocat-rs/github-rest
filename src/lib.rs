@@ -12,7 +12,7 @@ pub mod builders;
 #[cfg(feature = "client")]
 pub mod client;
 pub mod methods;
-pub mod structs;
+pub mod model;
 
 #[derive(Debug)]
 pub enum GithubRestError {

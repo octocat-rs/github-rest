@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use super::User;
-use crate::{builders::CommentOnCommitBuilder, methods::util, structs::nested::Comment, GithubRestError, Requester};
+use crate::{builders::CommentOnCommitBuilder, methods::util, model::nested::Comment, GithubRestError, Requester};
 
 pub type Commits = Vec<Commit>;
 
@@ -53,8 +53,8 @@ pub mod nested {
     };
     use serde::{Deserialize, Serialize};
 
-    // TODO: Create better names for these structs
-    use crate::structs::{CommitCommentReactionCreated, Reaction, User};
+    // TODO: Create better names for these model
+    use crate::model::{CommitCommentReactionCreated, Reaction, User};
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
     pub struct Commit {

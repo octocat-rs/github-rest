@@ -1,6 +1,7 @@
 //https://transform.tools/json-to-rust-serde
 
 pub use commits::*;
+pub use events::*;
 pub use issues::*;
 pub use pull_request::*;
 pub use push::*;
@@ -12,6 +13,7 @@ pub use user::*;
 pub use workflows::*;
 
 pub(crate) mod commits;
+mod events;
 mod issues;
 mod pull_request;
 mod push;
