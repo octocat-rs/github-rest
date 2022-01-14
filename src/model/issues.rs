@@ -1,5 +1,6 @@
-use super::{Repository, User as Assignee};
+use super::{Reactions, Repository, User};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use strum::{EnumString, EnumVariantNames};
 
 pub type Issues = Vec<Issue>;
@@ -16,10 +17,40 @@ pub struct IssueEvent {
     pub action: IssueAction,
     pub issue: Issue,
     pub repository: Repository,
-    pub sender: Assignee,
+    pub sender: User,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, EnumString, EnumVariantNames)]
+#[strum(serialize_all = "snake_case")]
+pub enum IssueCommentAction {
+    Created,
+    Deleted,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IssueCommentEvent {
+    action: IssueCommentAction,
+    issue: Issue,
+    comment: IssueComment,
+    sender: User,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IssueComment {
+    pub url: String,
+    pub html_url: String,
+    pub issue_url: String,
+    pub id: i64,
+    pub node_id: String,
+    pub user: User,
+    pub created_at: String,
+    pub updated_at: String,
+    pub author_association: String,
+    pub body: String,
+    pub reactions: Reactions,
+    pub performed_via_github_app: Value,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Label {
     id: i64,
     node_id: String,
@@ -30,7 +61,7 @@ pub struct Label {
     label_default: Option<bool>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Milestone {
     url: String,
     html_url: String,
@@ -41,7 +72,7 @@ pub struct Milestone {
     state: String,
     title: String,
     description: String,
-    creator: Assignee,
+    creator: User,
     open_issues: i64,
     closed_issues: i64,
     created_at: String,
@@ -50,7 +81,7 @@ pub struct Milestone {
     due_on: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct PullRequest {
     url: String,
     html_url: String,
@@ -58,7 +89,7 @@ pub struct PullRequest {
     patch_url: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Issue {
     id: i64,
     node_id: String,
@@ -72,10 +103,10 @@ pub struct Issue {
     state: String,
     title: String,
     body: String,
-    user: Assignee,
+    user: User,
     labels: Vec<Label>,
-    assignee: Option<Assignee>,
-    assignees: Vec<Assignee>,
+    assignee: Option<User>,
+    assignees: Vec<User>,
     milestone: Option<Milestone>,
     locked: bool,
     active_lock_reason: Option<String>,
@@ -84,7 +115,7 @@ pub struct Issue {
     closed_at: Option<serde_json::Value>,
     created_at: String,
     updated_at: String,
-    closed_by: Option<Assignee>,
+    closed_by: Option<User>,
     author_association: String,
 }
 

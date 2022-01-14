@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 use super::User;
-use crate::{builders::CommentOnCommitBuilder, methods::util, model::nested::Comment, GithubRestError, Requester};
+use crate::{
+    builders::CommentOnCommitBuilder, methods::util, model::nested::CommitComment, GithubRestError, Requester,
+};
 
 pub type Commits = Vec<Commit>;
 
@@ -9,7 +11,7 @@ pub type Commits = Vec<Commit>;
 pub struct Commit {
     pub sha: String,
     pub node_id: String,
-    pub commit: nested::Commit,
+    pub commit: nested::CommitComment,
     pub url: String,
     pub html_url: String,
     pub comments_url: String,
@@ -26,7 +28,7 @@ impl Commit {
         body: String,
         path: Option<String>,
         position: Option<String>,
-    ) -> Result<Comment, GithubRestError>
+    ) -> Result<CommitComment, GithubRestError>
     where
         T: Requester,
     {
@@ -89,7 +91,7 @@ pub mod nested {
     }
 
     #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-    pub struct Comment {
+    pub struct CommitComment {
         pub html_url: String,
         pub url: String,
         pub id: i64,
@@ -105,7 +107,7 @@ pub mod nested {
         pub updated_at: String,
     }
 
-    impl Comment {
+    impl CommitComment {
         pub async fn add_reaction<T>(
             &self,
             client: &T,

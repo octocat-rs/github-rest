@@ -107,12 +107,12 @@ pub async fn comment_on_commit<T>(
     repo: String,
     sha: String,
     options: CommentOnCommitBody,
-) -> Result<Comment, GithubRestError>
+) -> Result<CommitComment, GithubRestError>
 where
     T: Requester,
 {
     client
-        .req::<String, String, Comment>(
+        .req::<String, String, CommitComment>(
             EndPoints::PostReposownerrepoCommitscommitShaComments(owner, repo, sha),
             None,
             Some(serde_json::to_string(&options)?),

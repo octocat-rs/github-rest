@@ -1,5 +1,5 @@
 use crate::{
-    methods::{comment_on_commit, prelude::Comment, CommentOnCommitBody},
+    methods::{comment_on_commit, prelude::CommitComment, CommentOnCommitBody},
     GithubRestError, Requester,
 };
 
@@ -41,7 +41,7 @@ impl CommentOnCommitBuilder {
         self
     }
 
-    pub async fn execute<T>(self, client: &T) -> Result<Comment, GithubRestError>
+    pub async fn execute<T>(self, client: &T) -> Result<CommitComment, GithubRestError>
     where
         T: Requester,
     {

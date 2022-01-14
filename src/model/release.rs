@@ -17,6 +17,31 @@ pub struct ReleaseEvent {
     pub sender: User,
 }
 
+
+// Event gets emitted on a tag create (?)
+#[derive( Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateEvent {
+    #[serde(rename = "ref")]
+    pub ref_field: String,
+    pub ref_type: String,
+    pub master_branch: String,
+    pub description: Value,
+    pub pusher_type: String,
+    pub repository: Repository,
+    pub sender: User,
+}
+
+// Event gets emitted on a branch delete (?)
+#[derive( Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DeleteEvent {
+    #[serde(rename = "ref")]
+    pub ref_field: String,
+    pub ref_type: String,
+    pub pusher_type: String,
+    pub repository: Repository,
+    pub sender: User,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Release {
     pub url: String,
