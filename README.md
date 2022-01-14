@@ -1,5 +1,7 @@
 # Github-rest
 
+# This repository has been merged with the primary repository to create a (currently private) [monorepo](https://github.com/octocat-rs/octocat-rs). 
+
 A github api wrapper written in rust
 
 ```toml
