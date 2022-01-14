@@ -8,59 +8,82 @@ use strum::{EnumString, EnumVariantNames};
 #[derive(Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 #[strum(serialize_all = "snake_case")]
-pub enum EventTypes { // TODO: Sort variants
-    BranchProtectionRule,
-    CodeScanningAlert,
-    CommitComment,
-    DeployKey,
-    Deployment,
-    DeploymentStatus,
-    CheckRun,
-    Discussion,
-    DiscussionComment,
+pub enum EventTypes {
+    // GitHub Apps
     GithubAppAuthorization,
-    Gollum, // Wiki page created/updated
     Installation,
     InstallationRepositories,
-    Label,
-    MarketplacePurchase,
+
+    // Repositories
+    DeployKey,
+    Gollum, // Wiki page created/updated
     Member,
-    Membership,
-    Meta,
     Milestone,
-    Organization,
-    OrgBlock,
-    Package,
-    PageBuild,
-    Project,
-    ProjectCard,
-    ProjectColumn,
     Public,
-    PullRequestReview,
-    PullRequestReviewComment,
-    RepositoryDispatch,
+    Release,
     Repository,
+    RepositoryDispatch,
     RepositoryImport,
     RepositoryVulnerabilityAlert,
     SecretScanningAlert,
     SecurityAdvisory,
-    Sponsorship,
+    Star,
+    Watch,
+
+    // Pulls
+    PullRequest,
+    PullRequestReview,
+    PullRequestReviewComment,
+
+    // Commits
+    CommitComment,
+    Push,
     Status,
-    Team,
-    TeamAdd,
-    WorkflowDispatch,
-    CheckSuite,
+
+    // Issues
+    IssueComment,
+    Issues,
+    Label,
+
+    // Discussions
+    Discussion,
+    DiscussionComment,
+
+    // Branches/Tags
+    BranchProtectionRule,
     Create,
     Delete,
     Fork,
-    IssueComment,
-    Issues,
-    Ping,
-    PullRequest,
-    Push,
-    Release,
-    Star,
-    Watch,
+
+    // CI/Workflows
+    CheckRun,
+    CheckSuite,
+    CodeScanningAlert,
+    Deployment,
+    DeploymentStatus,
+    PageBuild,
+    WorkflowDispatch,
     WorkflowJob,
     WorkflowRun,
+
+    // Organizations
+    Membership,
+    OrgBlock,
+    Organization,
+    Team,
+    TeamAdd,
+
+    // Projects (for both organizations and repositories)
+    Project,
+    ProjectCard,
+    ProjectColumn,
+
+    // GitHub Marketplace
+    MarketplacePurchase,
+
+    // Misc
+    Meta,
+    Package, // <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#package>
+    Ping,
+    Sponsorship,
 }
