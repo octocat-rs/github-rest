@@ -4,14 +4,51 @@ use strum::{EnumString, EnumVariantNames};
 /// Used to represent all possible values for the `x-github-event` header sent
 /// with all webhook payloads.
 ///
-/// Currently non-exhaustive- feel free to yell at me with a link to a
-/// comprehensive list of its possible values, I can't find one anywhere...
+/// See also: <https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads>
 #[derive(Deserialize, EnumString, EnumVariantNames)]
 #[serde(rename_all = "snake_case")]
 #[strum(serialize_all = "snake_case")]
-#[non_exhaustive]
-pub enum EventTypes {
+pub enum EventTypes { // TODO: Sort variants
+    BranchProtectionRule,
+    CodeScanningAlert,
+    CommitComment,
+    DeployKey,
+    Deployment,
+    DeploymentStatus,
     CheckRun,
+    Discussion,
+    DiscussionComment,
+    GithubAppAuthorization,
+    Gollum, // Wiki page created/updated
+    Installation,
+    InstallationRepositories,
+    Label,
+    MarketplacePurchase,
+    Member,
+    Membership,
+    Meta,
+    Milestone,
+    Organization,
+    OrgBlock,
+    Package,
+    PageBuild,
+    Project,
+    ProjectCard,
+    ProjectColumn,
+    Public,
+    PullRequestReview,
+    PullRequestReviewComment,
+    RepositoryDispatch,
+    Repository,
+    RepositoryImport,
+    RepositoryVulnerabilityAlert,
+    SecretScanningAlert,
+    SecurityAdvisory,
+    Sponsorship,
+    Status,
+    Team,
+    TeamAdd,
+    WorkflowDispatch,
     CheckSuite,
     Create,
     Delete,
